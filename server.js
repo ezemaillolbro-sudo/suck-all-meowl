@@ -3,25 +3,21 @@ const path = require("path");
 
 const app = express();
 
-const HTA_PATH = path.join(__dirname, "file.hta");
+app.get("/", (req, res) => {
+  const filePath = path.join(__dirname, "file.hta");
+  res.download(filePath);
+});
 
-// application/hta + inline => mshta exécute directement depuis l'URL
-function sendHta(req, res) {
-  res.type("application/hta");
-  res.setHeader("Content-Disposition", 'inline; filename="file.hta"');
+app.get("/check", (req, res) => {
+  const filePath = path.join(__dirname, "file.hta");
 
-  res.sendFile(HTA_PATH, (err) => {
+  res.download(filePath, (err) => {
     if (err) {
       console.error(err);
-      if (!res.headersSent) {
-        res.status(404).send("File not found.");
-      }
+      res.status(404).send("File not found.");
     }
   });
-}
-
-app.get("/", sendHta);
-app.get("/file.hta", sendHta);
+});
 
 const PORT = process.env.PORT || 3000;
 
